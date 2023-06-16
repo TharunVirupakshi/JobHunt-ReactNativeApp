@@ -10,9 +10,7 @@ const useFetch = (endpoint, query) =>{
     const options = {
         method: 'GET',
         url: `https://jsearch.p.rapidapi.com/${endpoint}`,
-        params: {
-            ...query
-        },
+        params: { ...query},
         headers: {
             'X-RapidAPI-Key': '***REMOVED***',
             'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
@@ -36,7 +34,7 @@ const useFetch = (endpoint, query) =>{
     useEffect(()=>{
         fetchData()
     },[])
-
+    
     const refetch = () =>{
         setIsLoading(true)
         fetchData()
