@@ -3,7 +3,7 @@ import {
   SafeAreaView, Text, View, ScrollView, ActivityIndicator, RefreshControl, RefreshControlComponent
  } from 'react-native'
 import {Stack,useRouter, useSearchParams} from 'expo-router' 
-import{Company, JobAbout, JobTabs, ScreenHeaderBtn, Specifics} from '../../components'
+import{Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics} from '../../components'
 import{COLORS, icons, SIZES} from '../../constants'
 import useFetch from '../../hook/useFetch'
 
@@ -91,6 +91,7 @@ const JobDetails = () => {
               </View>
             )}
           </ScrollView> 
+          <JobFooter url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results'}/>
         </>
 
     </SafeAreaView>
