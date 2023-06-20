@@ -6,9 +6,9 @@ import {icons, SIZES} from '../../../constants'
 
 const jobTypes = ['Full-time','Part-time', 'Contractor']
 
-const Welcome = () => {
+const Welcome = ({searchTerm, setSerachTerm, handleClick}) => {
   const router = useRouter()
-  const [activeJobType, setactiveJobType] = useState('Full-Time')
+  const [activeJobType, setactiveJobType] = useState('Full-time')
 
   return (
     <View>
