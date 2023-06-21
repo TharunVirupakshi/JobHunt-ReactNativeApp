@@ -1,5 +1,8 @@
 import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
 
+//auth
+import LoginBox from "./auth/loginBox";
+
 // home screen
 import Welcome from "./home/welcome/Welcome";
 import Nearbyjobs from "./home/nearby/Nearbyjobs";
@@ -25,5 +28,6 @@ export {
   JobAbout,
   JobFooter,
   Specifics,
-  NearbyJobCard
+  NearbyJobCard,
+  LoginBox
 };
