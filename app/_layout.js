@@ -4,6 +4,7 @@ import {
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from "../context/auth";
 SplashScreen.preventAutoHideAsync();
 
 const Layout = () => {
@@ -23,7 +24,11 @@ const Layout = () => {
 
 
 
-    return <Stack onLayout={onLayoutRootView} /> ;
+    return(
+        <Provider>
+            <Stack onLayout={onLayoutRootView} /> 
+        </Provider>
+    ) 
 }
 
 export default Layout;

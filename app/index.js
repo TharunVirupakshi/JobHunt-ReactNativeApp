@@ -1,13 +1,16 @@
-import {View, Text, ScrollView, SafeAreaView} from "react-native";
+import {View, Text, ScrollView, SafeAreaView, TouchableOpacity} from "react-native";
 import { useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES} from '../constants'
 import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome} from '../components'
-
+import { useAuth } from "../context/auth";
+import SignIn from "./(auth)/sign-in";
 
 const Home = () => {
     const router = useRouter();
+    const { signOut } = useAuth();
     const [searchTerm, setSearchTerm] = useState("")
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     return ( 
         <SafeAreaView style={{flex:1, backgroundColor: COLORS.lightWhite,}}>
@@ -40,8 +43,11 @@ const Home = () => {
                             }
                         }}
                     />
-                    <Popularjobs/>
-                    <Nearbyjobs/>    
+                    {/* <Popularjobs/> */}
+                    {/* <Nearbyjobs/>     */}
+                    <TouchableOpacity onPress={() => signOut()} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
+                        <Text style={{color: COLORS.white, textAlign: 'center'}}>Sign Out</Text>
+                    </TouchableOpacity>
                 </View>
              </ScrollView>
         </SafeAreaView>
