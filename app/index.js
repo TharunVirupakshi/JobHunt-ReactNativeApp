@@ -8,7 +8,7 @@ import SignIn from "./(auth)/sign-in";
 
 const Home = () => {
     const router = useRouter();
-    const { signOut } = useAuth();
+    const { user, handleLogout } = useAuth();
     const [searchTerm, setSearchTerm] = useState("")
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -22,7 +22,7 @@ const Home = () => {
                         <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%'/>
                     ),
                     headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={images.profile} dimension='100%'/>
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' username={'Name'}/>
                     ),
                     headerTitle: " ",
                 }}
@@ -35,6 +35,7 @@ const Home = () => {
                         padding: SIZES.medium,
                     }}>
                     <Welcome
+                        userName={user? user.email : ''}
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
                         handleClick={()=>{
@@ -45,7 +46,7 @@ const Home = () => {
                     />
                     {/* <Popularjobs/> */}
                     {/* <Nearbyjobs/>     */}
-                    <TouchableOpacity onPress={() => signOut()} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
+                    <TouchableOpacity onPress={handleLogout} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
                         <Text style={{color: COLORS.white, textAlign: 'center'}}>Sign Out</Text>
                     </TouchableOpacity>
                 </View>

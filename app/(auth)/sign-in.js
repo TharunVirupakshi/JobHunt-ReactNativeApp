@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, TextInput, ImageBackground } from "react-native";
 import { useAuth, useRouter } from "../../context/auth";
 import { COLORS, FONT, SIZES } from "../../constants";
@@ -5,8 +6,10 @@ import { Stack } from "expo-router";
 import { LoginBox } from "../../components";
 import { LinearGradient } from 'expo-linear-gradient'
 import backgroundImg from '../../assets/images/pexels-fauxels-3184287.jpg'
+
+
 const SignIn = () => {
-  const { signIn } = useAuth();
+  const { signIn , handleSignUp, handleLogin, setEmail, setPassword} = useAuth();
   
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.secondary }}> 
@@ -22,7 +25,12 @@ const SignIn = () => {
           colors={['transparent', 'black']}
           style={styles.background}
         />
-        <LoginBox handleSignIn={signIn} handleSignUp={()=>{}} />
+        <LoginBox 
+          handleSignIn={handleLogin}
+          handleSignUp={handleSignUp} 
+          setPassword={setPassword} 
+          setEmail={setEmail} 
+        />
     </View>
   );
 }

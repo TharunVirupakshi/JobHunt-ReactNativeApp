@@ -2,7 +2,7 @@ import { Text, View, TouchableOpacity, StyleSheet, TextInput } from "react-nativ
 import { COLORS, FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
 
-const LoginBox = ({handleSignIn, handleSignUp}) => { 
+const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword}) => { 
 
   return (
       <View style={styles.authBox}>
@@ -13,7 +13,8 @@ const LoginBox = ({handleSignIn, handleSignUp}) => {
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
-            placeholder="Username"
+            placeholder="Email"
+            onChangeText={text => setEmail(text)}
           />
         </View>
        
@@ -21,6 +22,8 @@ const LoginBox = ({handleSignIn, handleSignUp}) => {
           <TextInput
             style={styles.input}
             placeholder="Password"
+            onChangeText={text => setPassword(text)}
+            secureTextEntry
           />
         </View>
          

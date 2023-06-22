@@ -1,5 +1,6 @@
 import { useRouter, useSegments } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
+import { auth } from "../firebase";
 
 const AuthContext = React.createContext(null);
 
@@ -25,6 +26,7 @@ function useProtectedRoute(user) {
       router.replace("/sign-in");
     } else if (user && inAuthGroup) {
       // Redirect away from the sign-in page.
+      console.log(user.email)
       router.replace("/");
     }
   }, [user, segments]);
@@ -32,15 +34,51 @@ function useProtectedRoute(user) {
 
 export function Provider(props) {
   const [user, setAuth] = React.useState(null);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   useProtectedRoute(user);
+
+  const handleSignUp = () => {
+    auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(userCreds =>{
+      setAuth(userCreds.user)
+      console.log('Registered: '+ userCreds.user.email)
+    })
+    .catch(error => alert(error.message))
+  }
+  const handleLogin = () => {
+    auth
+    .signInWithEmailAndPassword(email,password)
+    .then(userCreds => {
+      setAuth(userCreds.user)
+      console.log('Logged in with: '+userCreds.user.email)
+    })
+    .catch(error => alert(error.message))
+  }
+
+  const handleLogout = () => {
+    auth
+    .signOut()
+    .then(()=>{
+      setAuth(null)
+      console.log("Logged out")
+    })
+    .catch(error => alert(error.message))
+  }
+
+
 
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => setAuth({}),
-        signOut: () => setAuth(null),
         user,
+        handleSignUp,
+        handleLogin,
+        handleLogout,
+        setEmail,
+        setPassword,
       }}
     >
       {props.children}
