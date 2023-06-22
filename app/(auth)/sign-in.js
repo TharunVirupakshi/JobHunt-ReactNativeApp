@@ -9,7 +9,7 @@ import backgroundImg from '../../assets/images/pexels-fauxels-3184287.jpg'
 
 
 const SignIn = () => {
-  const { signIn , handleSignUp, handleLogin, setEmail, setPassword} = useAuth();
+  const { signIn , handleSignUp, handleLogin, setEmail, setPassword, setName} = useAuth();
   
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.secondary }}> 
@@ -29,7 +29,8 @@ const SignIn = () => {
           handleSignIn={handleLogin}
           handleSignUp={handleSignUp} 
           setPassword={setPassword} 
-          setEmail={setEmail} 
+          setEmail={setEmail}
+          setName={setName} 
         />
     </View>
   );

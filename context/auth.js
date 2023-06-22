@@ -36,15 +36,26 @@ export function Provider(props) {
   const [user, setAuth] = React.useState(null);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
 
   useProtectedRoute(user);
 
   const handleSignUp = () => {
     auth
-    .createUserWithEmailAndPassword(email, password)
+    .createUserWithEmailAndPassword(email, password, name)
     .then(userCreds =>{
-      setAuth(userCreds.user)
-      console.log('Registered: '+ userCreds.user.email)
+      const user = userCreds.user
+      user.updateProfile({
+        displayName: `${name}`,
+      })
+      .then(() => {
+        setAuth(user);
+        console.log('Registered:', user.email);
+      })
+      .catch(error => {
+        console.error('Failed to update user profile:', error);
+        // Handle any error that occurred during profile update
+      });
     })
     .catch(error => alert(error.message))
   }
@@ -74,6 +85,7 @@ export function Provider(props) {
     <AuthContext.Provider
       value={{
         user,
+        setName,
         handleSignUp,
         handleLogin,
         handleLogout,

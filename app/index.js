@@ -35,7 +35,7 @@ const Home = () => {
                         padding: SIZES.medium,
                     }}>
                     <Welcome
-                        userName={user? user.email : ''}
+                        userName={user? user.displayName : ''}
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
                         handleClick={()=>{

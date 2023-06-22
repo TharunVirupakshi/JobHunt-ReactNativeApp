@@ -1,8 +1,12 @@
 import { Text, View, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { useState } from "react";
 import { COLORS, FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
 
-const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword}) => { 
+const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName}) => { 
+  const [isSignUpBox, setIsSignUpBox] = useState(false) 
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [pass, setPass] = useState('')   
 
   return (
       <View style={styles.authBox}>
@@ -17,24 +21,62 @@ const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword}) => {
             onChangeText={text => setEmail(text)}
           />
         </View>
+        {isSignUpBox ? (
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            onChangeText={text => setName(text)}
+          />
+        </View>
+        ): (null)
+        }
        
+
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
             placeholder="Password"
-            onChangeText={text => setPassword(text)}
+            onChangeText={text => {setPassword(text); setPass(text)}}
             secureTextEntry
           />
         </View>
+
+        {isSignUpBox ? ( 
+              <View style={styles.inputWrapper}>
+                  <TextInput
+                      style={styles.input}
+                      placeholder=" Confirm Password"
+                      onChangeText={text => setConfirmPassword(text)}
+                      secureTextEntry
+                  />
+              </View>
+        ) : (null)}
          
-        <View style={styles.btnsContainer}>
-          <TouchableOpacity onPress={handleSignIn} style={styles.btn}>
-            <Text style={styles.btnTxt}>Log In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleSignUp} style={[styles.btn]} >
-            <Text style={[styles.btnTxt]}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+        
+          {!isSignUpBox ? (
+              <View style={styles.btnsContainer}>
+
+                  <TouchableOpacity onPress={handleSignIn} style={styles.btn}>
+                      <Text style={styles.btnTxt}>Log In</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setIsSignUpBox(true)} style={[styles.btn]} >
+                      <Text style={[styles.btnTxt]}>Sign Up</Text>
+                  </TouchableOpacity>
+              </View>
+          ):(   
+                
+                <View style={styles.btnsContainer}>
+                    <TouchableOpacity onPress={()=>setIsSignUpBox(false)} style={styles.btn}>
+                        <Text style={styles.btnTxt}>Log In</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={pass==confirmPassword?handleSignUp:() =>alert("Password and Confirm Password did not match")} style={[styles.btn]} >
+                        <Text style={[styles.btnTxt]}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View> 
+          )}
+          
+       
         
       </View>
    
