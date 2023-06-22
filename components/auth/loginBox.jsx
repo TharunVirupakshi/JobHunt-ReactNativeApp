@@ -26,10 +26,10 @@ const LoginBox = ({handleSignIn, handleSignUp}) => {
          
         <View style={styles.btnsContainer}>
           <TouchableOpacity onPress={handleSignIn} style={styles.btn}>
-            <Text style={{ textAlign: 'center' , color: COLORS.white}}>Log In</Text>
+            <Text style={styles.btnTxt}>Log In</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSignUp} style={styles.btn} >
-            <Text style={{ textAlign: 'center' , color: COLORS.white}}>Sign Up</Text>
+          <TouchableOpacity onPress={handleSignUp} style={[styles.btn]} >
+            <Text style={[styles.btnTxt]}>Sign Up</Text>
           </TouchableOpacity>
         </View>
         
@@ -56,6 +56,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  btn2: {
+    backgroundColor: COLORS.gray,
+    borderWidth: .7,
+    borderColor: COLORS.white,
+  },
+  btnTxt:{ 
+    textAlign: 'center' , 
+    color: COLORS.white,
+    fontFamily: FONT.bold
+    },
+
   btnsContainer: {
     // backgroundColor: 'blue',
     gap: SIZES.xSmall,
