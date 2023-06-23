@@ -33,7 +33,7 @@ function useProtectedRoute(user) {
 }
 
 export function Provider(props) {
-  const [user, setAuth] = React.useState(null);
+  const [user, setAuth] = React.useState({});
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')

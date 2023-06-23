@@ -12,6 +12,10 @@ const Home = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+    const goToProfile = () => {
+        router.push('./profile/profile')
+    }
+
     return ( 
         <SafeAreaView style={{flex:1, backgroundColor: COLORS.lightWhite,}}>
              <Stack.Screen 
@@ -22,7 +26,9 @@ const Home = () => {
                         <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%'/>
                     ),
                     headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' username={'Name'}/>
+
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' username={'Name'} handlePress={goToProfile}/>
+                    
                     ),
                     headerTitle: " ",
                 }}

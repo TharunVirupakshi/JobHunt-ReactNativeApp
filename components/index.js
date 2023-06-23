@@ -17,6 +17,7 @@ import Specifics from "./jobdetails/specifics/Specifics";
 
 // common
 import NearbyJobCard from "./common/cards/nearby/NearbyJobCard";
+import ProfileCard from './common/cards/profile/ProfileCard'
 
 export {
   ScreenHeaderBtn,
@@ -29,5 +30,6 @@ export {
   JobFooter,
   Specifics,
   NearbyJobCard,
-  LoginBox
+  LoginBox,
+  ProfileCard
 };
