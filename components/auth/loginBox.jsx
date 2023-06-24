@@ -3,7 +3,7 @@ import { useState } from "react";
 import { COLORS, FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
 
-const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName}) => { 
+const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName, setPhoneNumber}) => { 
   const [isSignUpBox, setIsSignUpBox] = useState(false) 
   const [confirmPassword, setConfirmPassword] = useState('')
   const [pass, setPass] = useState('')   
@@ -21,7 +21,7 @@ const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName}) 
             onChangeText={text => setEmail(text)}
           />
         </View>
-        {isSignUpBox ? (
+        {isSignUpBox ? (<>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
@@ -29,6 +29,14 @@ const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName}) 
             onChangeText={text => setName(text)}
           />
         </View>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            placeholder="Phone"
+            onChangeText={text => setPhoneNumber(text)}
+          />
+        </View>
+        </>
         ): (null)
         }
        

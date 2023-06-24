@@ -6,10 +6,12 @@ import { ScreenHeaderBtn,ProfileCard } from '../../components'
 import { useAuth } from "../../context/auth";
 
 
+
 const profile = () => {
     const router = useRouter();
     const [refreshing, setRefreshing] = useState(false)
     const { user, handleLogout } = useAuth();
+    
 
     const onRefresh = useCallback(()=>{
         setRefreshing(true)
@@ -43,7 +45,8 @@ const profile = () => {
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ flex: 1, padding: SIZES.medium}}>
-                <ProfileCard />   
+                <ProfileCard name={user?.displayName} email={user?.email}/> 
+
             </View>
             </ScrollView>
         </>

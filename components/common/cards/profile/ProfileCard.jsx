@@ -3,7 +3,8 @@ import React from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
 
-const ProfileCard = () => {
+
+const ProfileCard = ({name, email}) => {
   return (
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
@@ -19,9 +20,9 @@ const ProfileCard = () => {
       </TouchableOpacity>
 
       <View style={styles.shortDetails}>
-        <Text style={styles.profileName}>Alex Mark</Text>
+        <Text style={styles.profileName}>{name? name : 'No Name'}</Text>
         <Text style={styles.subText}>Designer</Text>
-        <Text style={styles.subText2}>alexmark@mail.com</Text>
+        <Text style={styles.subText2}>{email?email: 'N/A'}</Text>
       </View>
       <TouchableOpacity style={styles.editIconWrapper}>
             <Image 

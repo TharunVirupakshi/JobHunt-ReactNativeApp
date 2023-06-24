@@ -14,6 +14,7 @@ const Home = () => {
 
     const goToProfile = () => {
         router.push('./profile/profile')
+        console.log(user? user.phonenumber : 'no phone')
     }
 
     return ( 
@@ -33,13 +34,13 @@ const Home = () => {
                     headerTitle: " ",
                 }}
              />
-
              <ScrollView showsVerticalScrollIndicator={false}>
                 <View   
                     style={{
                         flex: 1,
                         padding: SIZES.medium,
                     }}>
+                    
                     <Welcome
                         userName={user? user.displayName : ''}
                         searchTerm={searchTerm}
@@ -50,11 +51,12 @@ const Home = () => {
                             }
                         }}
                     />
+                  
                     {/* <Popularjobs/> */}
                     {/* <Nearbyjobs/>     */}
-                    <TouchableOpacity onPress={handleLogout} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
+                    {/* <TouchableOpacity onPress={handleLogout} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
                         <Text style={{color: COLORS.white, textAlign: 'center'}}>Sign Out</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
              </ScrollView>
         </SafeAreaView>

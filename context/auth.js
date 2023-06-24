@@ -1,6 +1,6 @@
 import { useRouter, useSegments } from "expo-router";
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { auth, createUserDoc } from "../firebase";
 
 const AuthContext = React.createContext(null);
 
@@ -26,7 +26,7 @@ function useProtectedRoute(user) {
       router.replace("/sign-in");
     } else if (user && inAuthGroup) {
       // Redirect away from the sign-in page.
-      console.log(user.email)
+      // console.log(user)
       router.replace("/");
     }
   }, [user, segments]);
@@ -37,20 +37,25 @@ export function Provider(props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState(null)
 
   useProtectedRoute(user);
 
   const handleSignUp = () => {
     auth
-    .createUserWithEmailAndPassword(email, password, name)
+    .createUserWithEmailAndPassword(email, password, name, phoneNumber)
     .then(userCreds =>{
       const user = userCreds.user
+      const data = {phone : phoneNumber}
+      console.log('Received Ph: '+phoneNumber)
       user.updateProfile({
         displayName: `${name}`,
       })
       .then(() => {
+        createUserDoc(user, data)
         setAuth(user);
         console.log('Registered:', user.email);
+       
       })
       .catch(error => {
         console.error('Failed to update user profile:', error);
@@ -91,6 +96,7 @@ export function Provider(props) {
         handleLogout,
         setEmail,
         setPassword,
+        setPhoneNumber
       }}
     >
       {props.children}
