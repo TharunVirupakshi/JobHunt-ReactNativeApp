@@ -23,11 +23,27 @@ const ProfileCard = () => {
         <Text style={styles.subText}>Designer</Text>
         <Text style={styles.subText2}>alexmark@mail.com</Text>
       </View>
+      <TouchableOpacity style={styles.editIconWrapper}>
+            <Image 
+              source={icons.edit2}
+              resizeMode='contain'
+              style={styles.editIcon }
+            />
+      </TouchableOpacity>      
+
     </View>
 
     <View style={styles.addtionalDetails}>
       <Text style={styles.subText}>Bio:</Text>
-      <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+      <Text numberOfLines={2}>I am UI/UX Designer with 15 years of expertise in Design and Devlopment Industry. Through out my career, I have built projects for many big clients and comapanies. </Text>
+      <View style={styles.locationBox}>
+            <Image 
+              source={icons.location}
+              resizeMode='contain'
+              style={styles.locationImage }
+            />
+            <Text style={styles.locationName}>Bangalore, India</Text>
+      </View>
     </View>
     </View>
   )
@@ -41,7 +57,7 @@ const styles = StyleSheet.create({
     gap: SIZES.medium,
     backgroundColor: 'white',
     borderRadius: SIZES.medium,
-    height: 250,
+    // height: 250,
     ...SHADOWS.medium,
     shadowColor: COLORS.white,
     padding: SIZES.xLarge,
@@ -81,6 +97,35 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
+  },
+  locationBox: {
+    flexDirection: "row",
+    // justifyContent: "center",
+    // alignItems: 'flex-end',
+    // backgroundColor: 'blue',
+    paddingTop: SIZES.small
+
+  },
+  locationImage: {
+    width: 14,
+    height: 14,
+    marginLeft: -2,
+    tintColor: COLORS.gray,
+  },
+  locationName: {
+    fontSize: SIZES.medium - 2,
+    color: COLORS.gray,
+    fontFamily: FONT.regular,
+    marginLeft: 2,
+  },
+  editIconWrapper: {
+    // backgroundColor: 'blue',
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  editIcon: {
+    height: 20,
+    width: 20
   }
 
 })
