@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc ,getDoc, collection} from 'firebase/firestore';
 import 'firebase/compat/auth';
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -44,5 +44,26 @@ const createUserDoc = (user, data) => {
 
 }
  
+// Read user data based on user ID
+const readUserData = async (userId) => {
+  try {
+    const userRef = doc(collection(firestore, 'users'), userId);
+    const userDoc = await getDoc(userRef);
+    let userInfo
 
-export { auth, createUserDoc}
+    if (userDoc.exists()) {
+      console.log('User data(firbase):', userDoc.data());
+      userInfo =  userDoc.data()
+      return userInfo
+    } else {
+      console.log('User not found');
+    }
+
+  
+  } catch (error) {
+    console.log('Error reading user data:', error);
+  }
+};
+
+
+export { auth, createUserDoc, readUserData}

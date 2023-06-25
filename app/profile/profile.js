@@ -1,16 +1,33 @@
 import { View, Text, SafeAreaView, ScrollView, RefreshControl, ActivityIndicator } from 'react-native'
 import {Stack,useRouter, useSearchParams} from 'expo-router' 
-import {useState, useCallback} from 'react'
+import {useState, useCallback, useEffect} from 'react'
 import{COLORS, icons, SIZES} from '../../constants'
 import { ScreenHeaderBtn,ProfileCard } from '../../components'
 import { useAuth } from "../../context/auth";
+import { readUserData } from '../../firebase'
 
 
 
 const profile = () => {
     const router = useRouter();
     const [refreshing, setRefreshing] = useState(false)
-    const { user, handleLogout } = useAuth();
+    const { user, handleLogout, userInfo } = useAuth();
+    const [ userData, setUserData] = useState(null)
+
+    useEffect(() => {
+      const fetchData = async (uid) => {
+        try {
+          const data = await readUserData(uid);
+          setUserData(data);
+          console.log('User info received (profile):', data);
+        } catch (error) {
+          console.log('Error fetching user data:', error);
+        }
+      };
+    
+      fetchData(user?.uid);
+    }, []);
+    
     
 
     const onRefresh = useCallback(()=>{
@@ -45,8 +62,7 @@ const profile = () => {
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ flex: 1, padding: SIZES.medium}}>
-                <ProfileCard name={user?.displayName} email={user?.email}/> 
-
+                <ProfileCard name={user?.displayName} email={user?.email} info={userData}/> 
             </View>
             </ScrollView>
         </>

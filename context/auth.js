@@ -1,6 +1,6 @@
 import { useRouter, useSegments } from "expo-router";
-import React, { useState } from "react";
-import { auth, createUserDoc } from "../firebase";
+import React, { useState, useEffect } from "react";
+import { auth, createUserDoc, readUserData } from "../firebase";
 
 const AuthContext = React.createContext(null);
 
@@ -13,7 +13,6 @@ export function useAuth() {
 function useProtectedRoute(user) {
   const segments = useSegments();
   const router = useRouter();
-
   React.useEffect(() => {
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -26,20 +25,22 @@ function useProtectedRoute(user) {
       router.replace("/sign-in");
     } else if (user && inAuthGroup) {
       // Redirect away from the sign-in page.
-      // console.log(user)
       router.replace("/");
     }
   }, [user, segments]);
 }
 
 export function Provider(props) {
-  const [user, setAuth] = React.useState({});
+  const [user, setAuth] = React.useState(null);
+  // const [userInfo, setUserInfo] = useState(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState(null)
 
   useProtectedRoute(user);
+
+  
 
   const handleSignUp = () => {
     auth
@@ -65,12 +66,15 @@ export function Provider(props) {
     .catch(error => alert(error.message))
   }
   const handleLogin = () => {
-    auth
+     auth
     .signInWithEmailAndPassword(email,password)
-    .then(userCreds => {
+    .then(async userCreds => {
       setAuth(userCreds.user)
       console.log('Logged in with: '+userCreds.user.email)
-    })
+      // const data = await readUserData(userCreds.user.uid)
+      // console.log('userdata (auth): ', data)
+      // setUserInfo(data)
+    }) 
     .catch(error => alert(error.message))
   }
 
@@ -96,7 +100,8 @@ export function Provider(props) {
         handleLogout,
         setEmail,
         setPassword,
-        setPhoneNumber
+        setPhoneNumber,
+        // userInfo
       }}
     >
       {props.children}

@@ -1,10 +1,21 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import {useState, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
 
 
-const ProfileCard = ({name, email}) => {
+
+const ProfileCard = ({name, email, info}) => {
+
+  const [userInfo, setUserInfo] = useState(null)
+
+  useEffect(() => {
+    setUserInfo(info)
+    console.log("User info in card: ",info)
+  }, [info])
+  
+
+
   return (
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
@@ -21,7 +32,7 @@ const ProfileCard = ({name, email}) => {
 
       <View style={styles.shortDetails}>
         <Text style={styles.profileName}>{name? name : 'No Name'}</Text>
-        <Text style={styles.subText}>Designer</Text>
+        <Text style={styles.subText}>{userInfo?.role? userInfo.role : 'Add Role'}</Text>
         <Text style={styles.subText2}>{email?email: 'N/A'}</Text>
       </View>
       <TouchableOpacity style={styles.editIconWrapper}>
@@ -36,14 +47,14 @@ const ProfileCard = ({name, email}) => {
 
     <View style={styles.addtionalDetails}>
       <Text style={styles.subText}>Bio:</Text>
-      <Text numberOfLines={2}>I am UI/UX Designer with 15 years of expertise in Design and Devlopment Industry. Through out my career, I have built projects for many big clients and comapanies. </Text>
+      <Text numberOfLines={2}>{userInfo?.bio? userInfo.bio : 'Add bio...'}</Text>
       <View style={styles.locationBox}>
             <Image 
               source={icons.location}
               resizeMode='contain'
               style={styles.locationImage }
             />
-            <Text style={styles.locationName}>Bangalore, India</Text>
+            <Text style={styles.locationName}>{userInfo? userInfo.location : 'N/A'}</Text>
       </View>
     </View>
     </View>
