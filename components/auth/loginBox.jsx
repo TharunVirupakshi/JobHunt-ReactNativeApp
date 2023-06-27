@@ -3,6 +3,7 @@ import { useState } from "react";
 import { COLORS, FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
 
+
 const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName, setPhoneNumber}) => { 
   const [isSignUpBox, setIsSignUpBox] = useState(false) 
   const [confirmPassword, setConfirmPassword] = useState('')

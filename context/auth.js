@@ -33,8 +33,8 @@ function useProtectedRoute(user) {
 export function Provider(props) {
   const [user, setAuth] = React.useState(null); //Change the default state to {} to bypass auth
   // const [userInfo, setUserInfo] = useState(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('test2@mail.com') 
+  const [password, setPassword] = useState('1234567')
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState(null)
 

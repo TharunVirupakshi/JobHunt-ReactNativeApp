@@ -1,21 +1,30 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput } from 'react-native'
 import {useState, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
-
+import {Formik} from "formik"
 
 
 const ProfileCard = ({name, email, info}) => {
 
   const [userInfo, setUserInfo] = useState(null)
+  const [isEdit, setIsEdit] = useState(false)
+
+
 
   useEffect(() => {
     setUserInfo(info)
     console.log("User info in card: ",info)
   }, [info])
   
+  const handleEdit = () => {
+    if(!isEdit) setIsEdit(true)
+    else        setIsEdit(false)
+  }
+  
 
 
+  
   return (
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
@@ -29,13 +38,18 @@ const ProfileCard = ({name, email, info}) => {
             }
           />
       </TouchableOpacity>
-
-      <View style={styles.shortDetails}>
+      {!isEdit ? ( 
+        <View style={styles.shortDetails}>
         <Text style={styles.profileName}>{name? name : 'No Name'}</Text>
         <Text style={styles.subText}>{userInfo?.role? userInfo.role : 'Add Role'}</Text>
         <Text style={styles.subText2}>{email?email: 'N/A'}</Text>
+      </View>) : (
+        <View style={styles.shortDetails}>
+          <Text style={styles.profileName}>Edit Profile</Text>
       </View>
-      <TouchableOpacity style={styles.editIconWrapper}>
+      )}
+      
+      <TouchableOpacity style={styles.editIconWrapper} onPress={handleEdit}>
             <Image 
               source={icons.edit2}
               resizeMode='contain'
@@ -44,8 +58,7 @@ const ProfileCard = ({name, email, info}) => {
       </TouchableOpacity>      
 
     </View>
-
-    <View style={styles.addtionalDetails}>
+    {!isEdit ? ( <View style={styles.addtionalDetails}>
       <Text style={styles.subText}>Bio:</Text>
       <Text numberOfLines={2}>{userInfo?.bio? userInfo.bio : 'Add bio...'}</Text>
       <View style={styles.locationBox}>
@@ -56,7 +69,88 @@ const ProfileCard = ({name, email, info}) => {
             />
             <Text style={styles.locationName}>{userInfo?.location? userInfo.location : 'N/A'}</Text>
       </View>
-    </View>
+     
+    </View>) : (
+
+      //EDIT FORM
+      <Formik
+        initialValues={{
+          name: name,
+          bio: userInfo?.bio, 
+          role: userInfo?.role, 
+          location: userInfo?.location,
+        }}
+
+        onSubmit={(values) => {
+          console.log('Formik',values)
+        }}
+      >
+        {(props)=>(
+          <>
+            <View style={styles.feild}>
+              <Text style={styles.label}>Name</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your name"
+                  onChangeText={props.handleChange('name')}
+                  value={props.values.name}
+                />
+              </View>
+            </View>
+
+            <View style={styles.feild}>
+              <Text style={styles.label}>Bio:</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your bio"
+                  onChangeText={props.handleChange('bio')}
+                  value={props.values.bio}
+                />
+              </View>
+            </View>
+
+            <View style={styles.feild}>
+              <Text style={styles.label}>Role</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your role"
+                  onChangeText={props.handleChange('role')}
+                  value={props.values.role}
+                />
+              </View>
+            </View>
+
+           
+            <View style={styles.feild}>
+              <Text style={styles.label}>Location</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your location"
+                  onChangeText={props.handleChange('location')}
+                  value={props.values.location}
+                />
+              </View>
+            </View>
+
+            <View style={styles.btnsContainer}>
+                    <TouchableOpacity onPress={props.handleSubmit} style={styles.btn}>
+                        <Text style={styles.btnTxt}>Save</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleEdit} style={[styles.btn]} >
+                        <Text style={[styles.btnTxt]}>Discard</Text>
+                    </TouchableOpacity>
+                </View> 
+
+           
+          </>
+        )}
+      </Formik>
+      )}
+   
     </View>
   )
 }
@@ -138,6 +232,57 @@ const styles = StyleSheet.create({
   editIcon: {
     height: 20,
     width: 20
-  }
+  },
+  input: {
+    fontFamily: FONT.medium,
+    width: "100%",
+    height: '100%',
+    paddingHorizontal: SIZES.medium,
+  },
+  inputWrapper: {
+    backgroundColor: COLORS.white,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: SIZES.medium,
+   
+  },
+  feild: {
+    // backgroundColor: COLORS.secondary
+  },
+  label:{
+    paddingHorizontal: SIZES.medium,
+    paddingVertical: SIZES.small,
+    fontFamily: FONT.bold,
+  },
+  btn: {
+    // margin: SIZES.small,
+    // marginTop: 5,
+    flex: 1,
+    height: 50,
+    backgroundColor: 'black',
+    borderRadius: SIZES.medium,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn2: {
+    backgroundColor: COLORS.gray,
+    borderWidth: .7,
+    borderColor: COLORS.white,
+  },
+  btnTxt:{ 
+    textAlign: 'center' , 
+    color: COLORS.white,
+    fontFamily: FONT.bold
+    },
+
+  btnsContainer: {
+    // backgroundColor: 'blue',
+    gap: SIZES.xSmall,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 0,
+    margin: SIZES.small,
+  },
 
 })
