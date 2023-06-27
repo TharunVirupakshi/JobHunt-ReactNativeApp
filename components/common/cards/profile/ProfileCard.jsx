@@ -54,7 +54,7 @@ const ProfileCard = ({name, email, info}) => {
               resizeMode='contain'
               style={styles.locationImage }
             />
-            <Text style={styles.locationName}>{userInfo? userInfo.location : 'N/A'}</Text>
+            <Text style={styles.locationName}>{userInfo?.location? userInfo.location : 'N/A'}</Text>
       </View>
     </View>
     </View>
