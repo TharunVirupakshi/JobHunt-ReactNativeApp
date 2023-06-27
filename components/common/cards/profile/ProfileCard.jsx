@@ -101,12 +101,14 @@ const ProfileCard = ({name, email, info}) => {
 
             <View style={styles.feild}>
               <Text style={styles.label}>Bio:</Text>
-              <View style={styles.inputWrapper}>
+              <View style={[styles.inputWrapper,{height: 150}]}>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, {textAlignVertical: 'top', paddingTop: SIZES.medium}]}
                   placeholder="Enter your bio"
                   onChangeText={props.handleChange('bio')}
                   value={props.values.bio}
+                  numberOfLines={4}
+                  multiline
                 />
               </View>
             </View>
