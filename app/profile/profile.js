@@ -36,10 +36,14 @@ const profile = () => {
       fetchData(user?.uid);
     }, []);
     
+    const updateUserInfo = async(newData) => {
+      if(newData?.name? newData.name : false) user.updateProfile({displayName: `${newData.name}`})
+      await updateUserDoc(user?.uid, newData)
+    }
     
     const handleUpdate = useCallback(async(newData) => {
       console.log('New Data (profie.js):', newData)
-      await updateUserDoc(user?.uid, newData)
+      await updateUserInfo(newData)
       onRefresh()
     })
 
