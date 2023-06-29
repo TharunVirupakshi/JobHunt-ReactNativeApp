@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
-import { getFirestore, doc, setDoc ,getDoc, collection} from 'firebase/firestore';
+import { getFirestore, doc, setDoc ,getDoc, collection, updateDoc} from 'firebase/firestore';
 import 'firebase/compat/auth';
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -65,5 +65,16 @@ const readUserData = async (userId) => {
   }
 };
 
+const updateUserDoc = async(userId, newData) => {
+  try {
+    const userRef = doc(collection(firestore, 'users'), userId);
+    await updateDoc(userRef, newData);
+    console.log('Document updated successfully');
+  } catch (error) {
+    console.log("Error updating",error)
+  }
 
-export { auth, createUserDoc, readUserData}
+}
+
+
+export { auth, createUserDoc, readUserData, updateUserDoc}

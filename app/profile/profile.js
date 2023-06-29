@@ -4,7 +4,7 @@ import {useState, useCallback, useEffect} from 'react'
 import{COLORS, icons, SIZES} from '../../constants'
 import { ScreenHeaderBtn,ProfileCard } from '../../components'
 import { useAuth } from "../../context/auth";
-import { readUserData } from '../../firebase'
+import { readUserData, updateUserDoc } from '../../firebase'
 
 
 
@@ -15,6 +15,8 @@ const profile = () => {
     const [ userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(false)
+
+   
 
     const fetchData = async (uid) => {
       try {
@@ -35,6 +37,11 @@ const profile = () => {
     }, []);
     
     
+    const handleUpdate = useCallback(async(newData) => {
+      console.log('New Data (profie.js):', newData)
+      await updateUserDoc(user?.uid, newData)
+      onRefresh()
+    })
 
     const onRefresh = useCallback(()=>{
         setRefreshing(true)
@@ -75,7 +82,7 @@ const profile = () => {
               <Text>No data</Text>
             ) : (
             <View style={{ flex: 1, padding: SIZES.medium}}>
-                <ProfileCard name={user?.displayName} email={user?.email} info={userData}/> 
+                <ProfileCard name={user?.displayName} email={user?.email} info={userData} onSave={handleUpdate}/> 
             </View>
             )}
             </ScrollView>

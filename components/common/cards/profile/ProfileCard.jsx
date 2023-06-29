@@ -5,7 +5,8 @@ import { checkImageURL } from '../../../../utils'
 import {Formik} from "formik"
 
 
-const ProfileCard = ({name, email, info}) => {
+
+const ProfileCard = ({name, email, info, onSave}) => {
 
   const [userInfo, setUserInfo] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -83,6 +84,7 @@ const ProfileCard = ({name, email, info}) => {
 
         onSubmit={(values) => {
           console.log('Formik',values)
+          onSave(values)
         }}
       >
         {(props)=>(
