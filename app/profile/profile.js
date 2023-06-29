@@ -38,6 +38,7 @@ const profile = () => {
     
     const updateUserInfo = async(newData) => {
       if(newData?.name? newData.name : false) user.updateProfile({displayName: `${newData.name}`})
+      
       await updateUserDoc(user?.uid, newData)
     }
     

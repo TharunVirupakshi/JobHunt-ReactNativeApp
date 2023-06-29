@@ -3,6 +3,10 @@ import {useState, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
 import {Formik} from "formik"
+import * as ImagePicker from 'expo-image-picker';
+import { auth } from '../../../../firebase'
+
+
 
 
 
@@ -23,13 +27,44 @@ const ProfileCard = ({name, email, info, onSave}) => {
     else        setIsEdit(false)
   }
   
-
+  const uploadPhoto = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permission to access media library denied');
+        return;
+      }
+  
+      const imagePickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+        base64: true,
+      });
+  
+      if (!imagePickerResult.cancelled) {
+        const { base64 } = imagePickerResult;
+        
+        // // Update the user's profile with the base64-encoded image data as the photo URL
+        // const user = auth.currentUser;
+        // await user.updateProfile({
+        //   photoURL: `data:image/jpeg;base64,${base64}`,
+        // });
+  
+        console.log('User photo updated successfully');
+      }
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+    }
+  };
+  
 
   
   return (
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
-      <TouchableOpacity style={styles.imageContainer}>
+      <TouchableOpacity style={styles.imageContainer} onPress={uploadPhoto}>
         <Image 
             // source={{uri: checkImageURL() ? item.employer_logo : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
             source={images.profile}
