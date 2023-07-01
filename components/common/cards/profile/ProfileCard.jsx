@@ -10,16 +10,18 @@ import { auth } from '../../../../firebase'
 
 
 
-const ProfileCard = ({name, email, info, onSave}) => {
+const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
 
   const [userInfo, setUserInfo] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
-
+  const [photoUrl, setPhotoUrl] = useState(null)
+  
 
 
   useEffect(() => {
     setUserInfo(info)
-    console.log("User info in card: ",info)
+    console.log('Photo Url (ProfileCard):',userPhoto)
+    // console.log("User info in card: ",info)
   }, [info])
   
   const handleEdit = () => {
@@ -35,27 +37,22 @@ const ProfileCard = ({name, email, info, onSave}) => {
         return;
       }
   
-      const imagePickerResult = await ImagePicker.launchImageLibraryAsync({
+      let imagePickerResult = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
-        base64: true,
       });
-  
-      if (!imagePickerResult.cancelled) {
-        const { base64 } = imagePickerResult;
-        
-        // // Update the user's profile with the base64-encoded image data as the photo URL
-        // const user = auth.currentUser;
-        // await user.updateProfile({
-        //   photoURL: `data:image/jpeg;base64,${base64}`,
-        // });
-  
-        console.log('User photo updated successfully');
+
+      if(!imagePickerResult.canceled){
+        setPhotoUrl(imagePickerResult.assets[0].uri)
+        console.log(imagePickerResult.assets[0].uri)
+      }else{
+        setPhotoUrl(null)
       }
+    
     } catch (error) {
-      console.error('Error uploading photo:', error);
+      console.error('Error Selecting photo (ProfileCard):', error);
     }
   };
   
@@ -66,8 +63,7 @@ const ProfileCard = ({name, email, info, onSave}) => {
     <View style={styles.shortDetailsContainer}>
       <TouchableOpacity style={styles.imageContainer} onPress={uploadPhoto}>
         <Image 
-            // source={{uri: checkImageURL() ? item.employer_logo : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
-            source={images.profile}
+            source={{uri: checkImageURL(userPhoto) ? userPhoto : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
             resizeMode='cover'
             style={
               styles.profileImage
@@ -118,12 +114,14 @@ const ProfileCard = ({name, email, info, onSave}) => {
         }}
 
         onSubmit={(values) => {
-          console.log('Formik',values)
+          if(photoUrl)  values.photoUrl = photoUrl
+          // console.log('Formik',values)
           onSave(values)
         }}
       >
         {(props)=>(
           <>
+            
             <View style={styles.feild}>
               <Text style={styles.label}>Name</Text>
               <View style={styles.inputWrapper}>

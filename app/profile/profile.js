@@ -34,16 +34,16 @@ const profile = () => {
 
     useEffect(() => {
       fetchData(user?.uid);
+      console.log('User Photo (profile)', user)
     }, []);
     
     const updateUserInfo = async(newData) => {
-      if(newData?.name? newData.name : false) user.updateProfile({displayName: `${newData.name}`})
-      
       await updateUserDoc(user?.uid, newData)
+      fetchData(user?.uid)
     }
     
     const handleUpdate = useCallback(async(newData) => {
-      console.log('New Data (profie.js):', newData)
+      // console.log('New Data (profie.js):', newData)
       await updateUserInfo(newData)
       onRefresh()
     })
@@ -87,7 +87,7 @@ const profile = () => {
               <Text>No data</Text>
             ) : (
             <View style={{ flex: 1, padding: SIZES.medium}}>
-                <ProfileCard name={user?.displayName} email={user?.email} info={userData} onSave={handleUpdate}/> 
+                <ProfileCard name={user?.displayName} email={user?.email} info={userData} userPhoto={user?.photoURL} onSave={handleUpdate}/> 
             </View>
             )}
             </ScrollView>

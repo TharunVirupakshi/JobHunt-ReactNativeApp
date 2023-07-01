@@ -1,10 +1,11 @@
 import {View, Text, ScrollView, SafeAreaView, TouchableOpacity} from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES} from '../constants'
 import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome} from '../components'
 import { useAuth } from "../context/auth";
 import SignIn from "./(auth)/sign-in";
+import { checkImageURL } from "../utils";
 
 const Home = () => {
     const router = useRouter();
@@ -12,9 +13,13 @@ const Home = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+    useEffect(() => {
+      console.log('Photo URL (home): ',user?.photoURL)
+    }, [])
+    
+
     const goToProfile = () => {
         router.push('./profile/profile')
-        console.log(user? user.phonenumber : 'no phone')
     }
 
     return ( 
@@ -28,7 +33,7 @@ const Home = () => {
                     ),
                     headerRight: () => (
 
-                        <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' username={'Name'} handlePress={goToProfile}/>
+                        <ScreenHeaderBtn iconUrl={{uri: checkImageURL(user.photoURL) ? user.photoURL : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}} dimension='100%' username={'Name'} handlePress={goToProfile}/>
                     
                     ),
                     headerTitle: " ",
