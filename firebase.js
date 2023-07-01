@@ -75,6 +75,8 @@ const updateUserDoc = async(userId, newData) => {
       console.log('Photo uri received(firebase): ',photoUrl)
       const downloadUrl = await uploadPhoto(photoUrl) 
       auth.currentUser.updateProfile({photoURL: downloadUrl})
+    } else {
+      console.log('Photo uri NOT received(firebase)')
     }
     const userRef = doc(collection(firestore, 'users'), userId);
     await updateDoc(userRef, cleanedData);

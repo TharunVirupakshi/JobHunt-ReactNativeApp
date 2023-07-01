@@ -33,7 +33,7 @@ const Home = () => {
                     ),
                     headerRight: () => (
 
-                        <ScreenHeaderBtn iconUrl={{uri: checkImageURL(user.photoURL) ? user.photoURL : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}} dimension='100%' username={'Name'} handlePress={goToProfile}/>
+                        <ScreenHeaderBtn iconUrl={{uri: checkImageURL(user.photoURL) ? user?.photoURL : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}} dimension='100%' username={'Name'} handlePress={goToProfile}/>
                     
                     ),
                     headerTitle: " ",

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput, Alert } from 'react-native'
 import {useState, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
@@ -14,6 +14,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
 
   const [userInfo, setUserInfo] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
+  const [isImageEdit, setIsImageEdit] = useState(false)
   const [photoUrl, setPhotoUrl] = useState(null)
   
 
@@ -28,9 +29,24 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
     if(!isEdit) setIsEdit(true)
     else        setIsEdit(false)
   }
+
+  const createTwoButtonAlert = (title, msg, btnText1, btnText2, arg) =>
+    Alert.alert(title, msg, [
+      {
+        text: btnText1,
+        onPress: async() => {
+          onSave({photoUrl: arg})
+        },
+      },
+      {text: btnText2, 
+        onPress: () => {return false}
+      },
+    ]);
+
   
   const uploadPhoto = async () => {
     try {
+      setIsImageEdit(true)
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         alert('Permission to access media library denied');
@@ -46,6 +62,9 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
 
       if(!imagePickerResult.canceled){
         setPhotoUrl(imagePickerResult.assets[0].uri)
+        // console.log('Image Picker (ProfileCard):',photoUrl)
+        createTwoButtonAlert('Upload Photo?',null,'Upload','Discard',imagePickerResult.assets[0].uri)
+        
         console.log(imagePickerResult.assets[0].uri)
       }else{
         setPhotoUrl(null)
@@ -53,6 +72,8 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
     
     } catch (error) {
       console.error('Error Selecting photo (ProfileCard):', error);
+    } finally {
+      setIsImageEdit(false)
     }
   };
   
