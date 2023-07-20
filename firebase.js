@@ -69,8 +69,14 @@ const readUserData = async (userId) => {
 
 const updateUserDoc = async(userId, newData) => {
   try {
-    const {photoUrl, ...cleanedData} = newData
-    if(newData?.name) auth.currentUser.updateProfile({displayName: `${newData.name}`})
+    const {photoUrl, ...remainderData} = newData
+    const {bio, name, role, location} = remainderData;
+    const newDoc = {
+      bio: bio ?? "",
+      role: role ?? "",
+      location: location ?? "", 
+    }
+    if(name) auth.currentUser.updateProfile({displayName: `${newData.name}`})
     if(photoUrl){
       console.log('Photo uri received(firebase): ',photoUrl)
       const downloadUrl = await uploadPhoto(photoUrl) 
@@ -79,7 +85,7 @@ const updateUserDoc = async(userId, newData) => {
       console.log('Photo uri NOT received(firebase)')
     }
     const userRef = doc(collection(firestore, 'users'), userId);
-    await updateDoc(userRef, cleanedData);
+    await updateDoc(userRef, newDoc);
     console.log('Document updated successfully');
   } catch (error) {
     console.log("Error updating",error)

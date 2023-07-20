@@ -21,7 +21,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
 
   useEffect(() => {
     setUserInfo(info)
-    console.log('Photo Url (ProfileCard):',userPhoto)
+    // console.log('Photo Url (ProfileCard):',userPhoto)
     // console.log("User info in card: ",info)
   }, [info])
   
@@ -136,7 +136,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
 
         onSubmit={(values) => {
           if(photoUrl)  values.photoUrl = photoUrl
-          // console.log('Formik',values)
+          console.log('Formik',values)
           onSave(values)
         }}
       >

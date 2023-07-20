@@ -34,7 +34,7 @@ const profile = () => {
 
     useEffect(() => {
       fetchData(user?.uid);
-      console.log('User Photo (profile)', user)
+      // console.log('User Photo (profile)', user)
     }, []);
     
     const updateUserInfo = async(newData) => {
