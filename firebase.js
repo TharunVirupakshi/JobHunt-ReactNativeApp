@@ -76,6 +76,15 @@ const updateUserDoc = async(userId, newData) => {
       role: role ?? "",
       location: location ?? "", 
     }
+
+    // Filter out fields with empty values
+    const filteredDoc = Object.entries(newDoc).reduce((acc, [key, value]) => {
+      if (value !== "") {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
     if(name) auth.currentUser.updateProfile({displayName: `${newData.name}`})
     if(photoUrl){
       console.log('Photo uri received(firebase): ',photoUrl)
@@ -85,7 +94,7 @@ const updateUserDoc = async(userId, newData) => {
       console.log('Photo uri NOT received(firebase)')
     }
     const userRef = doc(collection(firestore, 'users'), userId);
-    await updateDoc(userRef, newDoc);
+    await updateDoc(userRef, filteredDoc);
     console.log('Document updated successfully');
   } catch (error) {
     console.log("Error updating",error)

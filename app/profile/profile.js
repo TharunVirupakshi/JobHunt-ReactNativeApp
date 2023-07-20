@@ -87,7 +87,14 @@ const profile = () => {
               <Text>No data</Text>
             ) : (
             <View style={{ flex: 1, padding: SIZES.medium}}>
-                <ProfileCard name={user?.displayName} email={user?.email} info={userData} userPhoto={user?.photoURL} onSave={handleUpdate}/> 
+                <ProfileCard 
+                  name={user?.displayName} 
+                  email={user?.email} 
+                  info={userData} 
+                  userPhoto={user?.photoURL} 
+                  onSave={handleUpdate} 
+                  /> 
+                  
             </View>
             )}
             </ScrollView>

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity,TextInput, Alert, Modal, ActivityIndicator } from 'react-native'
 import {useState, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, images, FONT} from '../../../../constants'
 import { checkImageURL } from '../../../../utils'
@@ -10,14 +10,16 @@ import { auth } from '../../../../firebase'
 
 
 
-const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
+const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
 
   const [userInfo, setUserInfo] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
   const [isImageEdit, setIsImageEdit] = useState(false)
   const [photoUrl, setPhotoUrl] = useState(null)
+  const [loading, setLoading] = useState(false);
   
-
+  const [modalVisible, setModalVisible] = useState(false)
+  
 
   useEffect(() => {
     setUserInfo(info)
@@ -30,8 +32,8 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
     else        setIsEdit(false)
   }
 
-  const createTwoButtonAlert = (title, msg, btnText1, btnText2, arg) =>
-    Alert.alert(title, msg, [
+  const createTwoButtonAlert = (title, msg, btnText1, btnText2, arg) =>{
+    Alert.alert(title,msg, [
       {
         text: btnText1,
         onPress: async() => {
@@ -41,7 +43,10 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
       {text: btnText2, 
         onPress: () => {return false}
       },
-    ]);
+      
+    ]
+    );
+  }
 
   
   const uploadPhoto = async () => {
@@ -57,17 +62,18 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.8,
+        quality: 0.6,
       });
 
       if(!imagePickerResult.canceled){
         setPhotoUrl(imagePickerResult.assets[0].uri)
         // console.log('Image Picker (ProfileCard):',photoUrl)
-        createTwoButtonAlert('Upload Photo?',null,'Upload','Discard',imagePickerResult.assets[0].uri)
-        
+        // createTwoButtonAlert('Upload Photo?',null,'Upload','Discard',imagePickerResult.assets[0].uri)
+        setModalVisible(true)
         console.log(imagePickerResult.assets[0].uri)
       }else{
         setPhotoUrl(null)
+        setModalVisible(false)
       }
     
     } catch (error) {
@@ -79,9 +85,60 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
   
 
   
-  return (
+  return (<>
+    <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+        statusBarTranslucent={true}
+      >
+      <View style={styles.popupOverlay}>
+        
+        <View style={styles.popupCard}>
+          <View style={styles.popupImgContainer}>
+            <Image
+              source={{uri: photoUrl}}
+              resizeMode='cover'
+              style={styles.popupImg}
+            />
+            {loading && 
+            <ActivityIndicator 
+              size="large" color={COLORS.white} 
+              style={styles.loading}/>}
+          </View>
+          <View style={styles.btnsContainer}>
+            <TouchableOpacity 
+                onPress={
+                  async () => {
+                    try {
+                      setLoading(true)
+                      await onSave({ photoUrl: photoUrl });
+                    } catch (error) {
+                      // Handle the error here or log it for debugging purposes
+                      console.error("Error in onSave:", error);
+                    } finally{
+                      setLoading(false)
+                    }
+                  }} 
+                style={styles.btn}>
+                <Text style={styles.btnTxt}>Upload</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              setModalVisible(!modalVisible)
+              }} 
+              style={[styles.btn, styles.btn2]} >
+                <Text style={[styles.btnTxt2]}>Cancel</Text>
+            </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+      </Modal>
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
+    
       <TouchableOpacity style={styles.imageContainer} onPress={uploadPhoto}>
         <Image 
             source={{uri: checkImageURL(userPhoto) ? userPhoto : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
@@ -94,7 +151,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
       {!isEdit ? ( 
         <View style={styles.shortDetails}>
         <Text style={styles.profileName}>{name? name : 'No Name'}</Text>
-        <Text style={styles.subText}>{userInfo?.role? userInfo.role : 'Add Role'}</Text>
+        <Text style={styles.subText} >{userInfo?.role? userInfo.role : 'Add Role'}</Text>
         <Text style={styles.subText2}>{email?email: 'N/A'}</Text>
       </View>) : (
         <View style={styles.shortDetails}>
@@ -198,8 +255,8 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
                     <TouchableOpacity onPress={props.handleSubmit} style={styles.btn}>
                         <Text style={styles.btnTxt}>Save</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleEdit} style={[styles.btn]} >
-                        <Text style={[styles.btnTxt]}>Discard</Text>
+                    <TouchableOpacity onPress={handleEdit} style={[styles.btn, styles.btn2]} >
+                        <Text style={[styles.btnTxt2]}>Discard</Text>
                     </TouchableOpacity>
                 </View> 
 
@@ -210,12 +267,55 @@ const ProfileCard = ({name, email, info, onSave, userPhoto}) => {
       )}
    
     </View>
+    </>
   )
 }
 
 export default ProfileCard
 
+
+
 const styles = StyleSheet.create({
+
+  loading:{
+    position: 'absolute',
+    zIndex: 99999,
+    width: 100,
+    height: 100,
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+  },  
+  popupOverlay:{
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center' 
+  },
+  popupCard:{
+    width: '80%',
+    aspectRatio: .8,
+    backgroundColor: 'white',
+    borderRadius: SIZES.medium,
+    // height: 250,
+    ...SHADOWS.medium,
+    shadowColor: COLORS.white,
+    padding: SIZES.xLarge,
+    justifyContent: 'space-between',
+    // margin:SIZES.large,
+  },
+  popupImg:{
+    width: "100%",
+    height: "100%",
+  },
+  popupImgContainer:{
+    width: "100%",
+    aspectRatio: 1,
+    position: 'relative',
+    // backgroundColor: 'black',
+    borderRadius: SIZES.medium,
+    overflow: 'hidden',
+  },
   cardContainer: {
   
     gap: SIZES.medium,
@@ -229,8 +329,10 @@ const styles = StyleSheet.create({
   shortDetailsContainer:{
     flexDirection: 'row',
     gap: SIZES.medium,
+    // flexWrap: 'wrap'
     // backgroundColor: 'blue'
   },
+  
   profileImage: {
     height: "100%",
     width: "100%",
@@ -250,10 +352,13 @@ const styles = StyleSheet.create({
     fontFamily: FONT.regular, 
   },
   shortDetails: {
+    flex: 1,
     height: 100,
+    // width: 200,
     // alignItems: 'center',
     // backgroundColor: 'blue',
-    justifyContent: 'center'
+    justifyContent: 'center',
+
   },
   imageContainer: {
     width: 100,
@@ -284,7 +389,6 @@ const styles = StyleSheet.create({
   },
   editIconWrapper: {
     // backgroundColor: 'blue',
-    flex: 1,
     alignItems: 'flex-end'
   },
   editIcon: {
@@ -324,7 +428,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btn2: {
-    backgroundColor: COLORS.gray,
+    backgroundColor: 'lightgray',
     borderWidth: .7,
     borderColor: COLORS.white,
   },
@@ -333,6 +437,11 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: FONT.bold
     },
+  btnTxt2:{ 
+  textAlign: 'center' , 
+  color: 'black',
+  fontFamily: FONT.bold
+  }, 
 
   btnsContainer: {
     // backgroundColor: 'blue',
@@ -340,7 +449,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 0,
-    margin: SIZES.small,
+    // margin: SIZES.small,
   },
 
 })
