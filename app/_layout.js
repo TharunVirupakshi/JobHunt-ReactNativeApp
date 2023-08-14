@@ -5,8 +5,9 @@ import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from "../context/auth";
+import { createDrawerNavigator } from '@react-navigation/drawer';
 SplashScreen.preventAutoHideAsync();
-
+const Drawer = createDrawerNavigator();
 const Layout = () => {
     const [fontsLoaded] = useFonts({
         DMBold: require('../assets/fonts/DMSans-Bold.ttf'),
