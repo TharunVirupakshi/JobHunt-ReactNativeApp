@@ -23,6 +23,7 @@ const SignIn = () => {
         <LinearGradient
           // Background Linear Gradient
           colors={['transparent', 'black']}
+          
           style={styles.background}
         />
         <LoginBox 

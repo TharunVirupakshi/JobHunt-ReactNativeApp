@@ -2,13 +2,13 @@ import {View, Text,Image, Animated,ScrollView, SafeAreaView, TouchableOpacity, D
 import { useState, useEffect , useRef} from "react";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES} from '../constants'
-import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome} from '../components'
+import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome, Sidebar} from '../components'
 import { useAuth } from "../context/auth";
 import SignIn from "./(auth)/sign-in";
 import { checkImageURL } from "../utils";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import Sidebar from "../components";
+import { LinearGradient } from 'expo-linear-gradient'
 import 'react-native-gesture-handler';
 
 
@@ -31,25 +31,14 @@ const Home = () => {
         router.push('./profile/profile')
     }
 
-
-
-    const navigationView = () => (
-        <View style={[styles.container, styles.navigationContainer]}>
-          <Text style={styles.paragraph}>I'm in the Drawer!</Text>
-          <Button
-            title="Close drawer"
-            // onPress={() => drawer.current.closeDrawer()}
-          />
-        </View>
-      );
-
     // Animated Properties...
 
     const offsetValue = useRef(new Animated.Value(0)).current;
     // Scale Intially must be One...
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;  
-
+    
+    //Slide Animatin for the sidebar
     const slideAnimation = () => {
        // Do Actions Here....
                 // Scaling the view...
@@ -86,9 +75,15 @@ const Home = () => {
         //      drawerPosition={'left'}
         //      renderNavigationView={navigationView}
         //      >
-        <SafeAreaView style={{flex:1, backgroundColor: COLORS.secondary,}}>
+        <SafeAreaView style={{flex:1, backgroundColor: COLORS.primary,}}>
 
+          <Sidebar userPhoto={user?.photoURL} userName={user?.displayName}/>
 
+        {/* <LinearGradient
+          // Background Linear Gradient
+          colors={['transparent', 'black']}
+          style={styles.background}
+        /> */}
         <Animated.View style={{
                 flexGrow: 1,
                 backgroundColor: 'white',
@@ -196,6 +191,13 @@ const styles = StyleSheet.create({
       padding: 16,
       fontSize: 15,
       textAlign: 'center',
+    },
+    background: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: 300,
     },
   });
 
