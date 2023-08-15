@@ -31,6 +31,8 @@ const Home = () => {
         router.push('./profile/profile')
     }
 
+
+
     const navigationView = () => (
         <View style={[styles.container, styles.navigationContainer]}>
           <Text style={styles.paragraph}>I'm in the Drawer!</Text>
@@ -48,6 +50,35 @@ const Home = () => {
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;  
 
+    const slideAnimation = () => {
+       // Do Actions Here....
+                // Scaling the view...
+                Animated.timing(scaleValue, {
+                  toValue: showMenu ? 1 : 0.88,
+                  duration: 300,
+                  useNativeDriver: true
+                  })
+                  .start()
+  
+                  Animated.timing(offsetValue, {
+                  // YOur Random Value...
+                  toValue: showMenu ? 0 : 230,
+                  duration: 300,
+                  useNativeDriver: true
+                  })
+                  .start()
+  
+                  Animated.timing(closeButtonOffset, {
+                  // YOur Random Value...
+                  toValue: !showMenu ? -30 : 0,
+                  duration: 300,
+                  useNativeDriver: true
+                  })
+                  .start()
+  
+                  setShowMenu(!showMenu);
+    }
+
     return (
         // <DrawerLayoutAndroid 
         //      ref={drawer}
@@ -56,6 +87,7 @@ const Home = () => {
         //      renderNavigationView={navigationView}
         //      >
         <SafeAreaView style={{flex:1, backgroundColor: COLORS.secondary,}}>
+
 
         <Animated.View style={{
                 flexGrow: 1,
@@ -75,11 +107,12 @@ const Home = () => {
                 ]
             }}>
 
-            
+              {/* Default header (Not used) */}
              <Stack.Screen 
                 options={{
                     headerStyle: {backgroundColor: COLORS.lightWhite},
                     headerShadowVisible: false,
+                    headerShown: false,
                     headerLeft: () => (
                         <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' 
                         // handlePress={() => drawer.current.openDrawer()}
@@ -88,11 +121,34 @@ const Home = () => {
                     headerRight: () => (
 
                         <ScreenHeaderBtn iconUrl={{uri: checkImageURL(user?.photoURL) ? user?.photoURL : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}} dimension='100%' username={'Name'} handlePress={goToProfile}/>
-                    
+                        
                     ),
                     headerTitle: " ",
                 }}
              />
+
+            {/* Custom Header */}
+             <View 
+              style={{
+                // backgroundColor: 'gray',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingVertical: SIZES.small
+
+              }}
+             >
+              <Animated.View>
+                <ScreenHeaderBtn iconUrl={showMenu ? icons.chevronLeft : icons.menu} dimension='60%' 
+                    handlePress={slideAnimation}
+                />
+              </Animated.View>
+
+              <ScreenHeaderBtn iconUrl={{uri: checkImageURL(user?.photoURL) ? user?.photoURL : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}} dimension='100%' username={'Name'} handlePress={goToProfile}/>
+             </View>
+
+
+             {/* Body */}
              <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View   
@@ -112,50 +168,6 @@ const Home = () => {
                         }}
                     />
 
-            <Animated.View style={{
-            transform: [{
-                translateY: closeButtonOffset
-            }]
-            }}>
-            <TouchableOpacity onPress={() => {
-                // Do Actions Here....
-                // Scaling the view...
-                Animated.timing(scaleValue, {
-                toValue: showMenu ? 1 : 0.88,
-                duration: 300,
-                useNativeDriver: true
-                })
-                .start()
-
-                Animated.timing(offsetValue, {
-                // YOur Random Value...
-                toValue: showMenu ? 0 : 230,
-                duration: 300,
-                useNativeDriver: true
-                })
-                .start()
-
-                Animated.timing(closeButtonOffset, {
-                // YOur Random Value...
-                toValue: !showMenu ? -30 : 0,
-                duration: 300,
-                useNativeDriver: true
-                })
-                .start()
-
-                setShowMenu(!showMenu);
-                 }}>
-                <Image source={showMenu ? icons.menu : icons.chevronLeft} style={{
-                width: 20,
-                height: 20,
-                tintColor: 'black',
-                marginTop: 40,
-
-                }}></Image>
-
-            </TouchableOpacity>
-                 
-          </Animated.View>
                     {/* <Popularjobs/>
                     <Nearbyjobs/>     */}
                     {/* <TouchableOpacity onPress={handleLogout} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
