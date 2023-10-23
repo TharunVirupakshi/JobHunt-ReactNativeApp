@@ -14,20 +14,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  likeBtn: {
+  likeBtn: (state)=> ({
     width: 55,
     height: 55,
     borderWidth: 1,
     borderColor: "#F37453",
+    backgroundColor: state ? "#F37453" : 'transparent', 
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
-  },
-  likeBtnImage: {
+  }),
+  likeBtnImage: (state)=>({
     width: "40%",
     height: "40%",
-    tintColor: "#F37453",
-  },
+    tintColor:state ? "white" : "#F37453",
+    zIndex: 999,
+  }),
   applyBtn: {
     flex: 1,
     backgroundColor: "#FE7654",

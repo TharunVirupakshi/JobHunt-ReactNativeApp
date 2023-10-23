@@ -23,6 +23,10 @@ const JobDetails = () => {
     setRefreshing(false)
   },[])
 
+  
+
+  console.log("JOB DETAILS: ",data[0]?.job_id)
+
   const displayTabContent = () => {
     switch (activeTab) {
       case 'Qualification':
@@ -95,7 +99,7 @@ const JobDetails = () => {
               </View>
             )}
           </ScrollView> 
-          <JobFooter url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results'}/>
+          <JobFooter url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results'} id={data[0]?.job_id}/>
         </>
 
     </SafeAreaView>

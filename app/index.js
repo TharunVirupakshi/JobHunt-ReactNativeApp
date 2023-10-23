@@ -10,7 +10,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient'
 import 'react-native-gesture-handler';
-
+import { fetchFavoriteItems } from "../firebase";
 
 const Drawer = createDrawerNavigator();
 
@@ -21,11 +21,21 @@ const Home = () => {
     const { user, handleLogout } = useAuth();
     const [searchTerm, setSearchTerm] = useState("")
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [favs, setFavs] = useState([])
+    
+    const fetchFav = async()=>{
+        console.log("Saved-jobs:",await fetchFavoriteItems(user?.uid))
+        setFavs(await fetchFavoriteItems(user?.uid))
+      }
+     
 
     useEffect(() => {
       console.log('Photo URL (home): ',user?.photoURL)
+      fetchFav()
+      console.log("Fetched favs:", favs)
     }, [])
     
+
 
     const goToProfile = () => {
         router.push('./profile/profile')
