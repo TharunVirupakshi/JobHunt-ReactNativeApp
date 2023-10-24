@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, Linking, Image } from 'react-native'
 import styles from './footer.style'
 import { icons } from '../../../constants'
 import { openURL } from 'expo-linking'
-import { addFavoriteItem, fetchFavoriteItems } from '../../../firebase'
+import { addFavoriteItem, fetchFavoriteItems, deleteFavoriteItem} from '../../../firebase'
 import { useAuth } from '../../../context/auth'
 import { updateDoc } from 'firebase/firestore'
 
@@ -13,40 +13,34 @@ const Footer = ({url, id}) => {
   console.log("Job id in footer: ",id)
   const [state, setState] = useState(false)
   const [favs, setFavs] = useState([])
-  const handlePress = () =>{
-     addToFav();
-     setState(!state)
-  }
- 
 
-
-  
-  const {user} = useAuth()
-  const fetchFav = async()=>{
-    console.log("Saved-jobs:",await fetchFavoriteItems(user?.uid))
-    const list = await fetchFavoriteItems(user?.uid)
-    if(list.includes(id))
-      setState(true)
-    else
-      setState(false)
-  }
-
-  const updateState = async()=>{
-    const list = await fetchFavoriteItems(user?.uid)
-    if(list.includes(id))
-      setState(true)
-    else
-      setState(false) 
-  }
-   
   useEffect(() => {
-    fetchFav()
-  }, [state]);
+    fetchFavoriteItems(user?.uid).then((favoriteItems) => {
+      setState(favoriteItems.includes(id));
+    });
+  }, [id]);
+
+  const handlePress = () =>{
+    if(!state){
+      addToFav()
+      setState(true)
+    }else if(state){
+      removeFav()
+      setState(false)
+    }
+     
+  }
+  const {user} = useAuth()
+
 
   const addToFav = () =>{
     addFavoriteItem(user?.uid, id)
-    console.log("User Saved jobs: ", fetchFav())
+    // console.log("User Saved jobs: ", fetchFavoriteItems(user?.uid))
+  }
 
+  const removeFav = ()=>{
+    deleteFavoriteItem(user?.uid, id)
+    // console.log("User Saved jobs: ", fetchFavoriteItems(user?.uid))
   }
 
   return (
