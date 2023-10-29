@@ -23,22 +23,30 @@ const Home = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [favs, setFavs] = useState([])
     
-    const fetchFav = async()=>{
-        console.log("Saved-jobs:",await fetchFavoriteItems(user?.uid))
-        setFavs(await fetchFavoriteItems(user?.uid))
-      }
+    // const fetchFav = async()=>{
+    //     console.log("Saved-jobs:",await fetchFavoriteItems(user?.uid))
+    //     setFavs(await fetchFavoriteItems(user?.uid))
+    //   }
      
 
     useEffect(() => {
       console.log('Photo URL (home): ',user?.photoURL)
-      fetchFav()
-      console.log("Fetched favs:", favs)
+      // fetchFav()
+      // console.log("Fetched favs:", favs)
     }, [])
     
 
 
     const goToProfile = () => {
         router.push('./profile/profile')
+    }
+
+    const goToSavedJobs = () => {
+      router.push('./saved-jobs/savedJobs')
+    }
+
+    const appRoutes = {
+      goToSavedJobs
     }
 
     // Animated Properties...
@@ -87,7 +95,7 @@ const Home = () => {
         //      >
         <SafeAreaView style={{flex:1, backgroundColor: COLORS.primary,}}>
 
-          <Sidebar userPhoto={user?.photoURL} userName={user?.displayName}/>
+          <Sidebar userPhoto={user?.photoURL} userName={user?.displayName} appRoutes={appRoutes}/>
 
         {/* <LinearGradient
           // Background Linear Gradient

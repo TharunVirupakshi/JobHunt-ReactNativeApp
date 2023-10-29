@@ -174,7 +174,7 @@ const fetchFavoriteItems = async(id) => {
       querySnapshot.forEach((doc) => {
         favoriteItems.push(doc.id); // This will give you the favorite item ID
       });
-      console.log("Favs:",favoriteItems)
+      console.log("Favs(Firebase):",favoriteItems)
       return favoriteItems
     })
     .catch((error) => {

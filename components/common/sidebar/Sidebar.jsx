@@ -3,7 +3,10 @@ import { View, Text, SafeAreaView, TouchableOpacity, Image, StyleSheet, Pressabl
 import { SIZES , COLORS, FONT} from '../../../constants'
 import { checkImageURL } from '../../../utils'
 
-const Sidebar = ({userPhoto, userName}) => {
+const Sidebar = ({userPhoto, userName, appRoutes}) => {
+
+  const {goToSavedJobs} = appRoutes;
+
   return (
     <SafeAreaView style={{
         flex: 1,
@@ -32,7 +35,7 @@ const Sidebar = ({userPhoto, userName}) => {
 
 
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={()=>goToSavedJobs()}>
             <Text style={styles.btnTxt}>
               Saved Jobs
             </Text>
