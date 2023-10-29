@@ -19,7 +19,7 @@ const useFetchMultiple = (endpoint,paramName, ids) =>{
                 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
             }
         };
-        setIsLoading(true)
+        // setIsLoading(true)
         try {
             const response = await axios.request(options)
             return response.data.data
@@ -28,7 +28,7 @@ const useFetchMultiple = (endpoint,paramName, ids) =>{
             console.log("Error(useFetchMultiple):", error)
             alert('There is an error')
         } finally {
-            setIsLoading(false)
+            // setIsLoading(false)
         }
     }
     // const fetchAllData = async () => {
@@ -56,7 +56,7 @@ const useFetchMultiple = (endpoint,paramName, ids) =>{
             }
             console.log("Fetched "+id+" :", dataForId[0].employer_name)
             // Introduce a delay between requests (e.g., 1000 milliseconds or 1 second) due to limitation is free plan of Rapid API
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 100));
           }
           setData(results);
         } catch (error) {
