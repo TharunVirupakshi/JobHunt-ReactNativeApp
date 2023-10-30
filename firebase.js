@@ -4,13 +4,15 @@ import { getFirestore, doc, setDoc ,getDoc, collection, updateDoc, getDocs, dele
 import {getStorage, ref, uploadBytes, getDownloadURL, u} from 'firebase/storage'
 import 'firebase/compat/auth';
 // Your web app's Firebase configuration
+
+
 const firebaseConfig = {
-  apiKey: "***REMOVED***",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "jobhunt-app.firebaseapp.com",
   projectId: "jobhunt-app",
   storageBucket: "jobhunt-app.appspot.com",
-  messagingSenderId: "***REMOVED***",
-  appId: "***REMOVED***"
+  messagingSenderId: process.env.FIREBASE_MSG_SNDR_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 // Initialize Firebase

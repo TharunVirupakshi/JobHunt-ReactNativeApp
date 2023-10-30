@@ -1,5 +1,4 @@
 import axios from "axios";
-import { isEmptyArray } from "formik";
 import { useState, useEffect } from "react";
 
 
@@ -8,14 +7,14 @@ const useFetchMultiple = (endpoint,paramName, ids) =>{
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
   
-
+    const api_key = process.env.RAPID_API_KEY
     const fetchData = async(id) => {
         const options = {
             method: 'GET',
             url: `https://jsearch.p.rapidapi.com/${endpoint}`,
             params: {[paramName]: id},
             headers: {
-                'X-RapidAPI-Key': '***REMOVED***',
+                'X-RapidAPI-Key': api_key,
                 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
             }
         };
