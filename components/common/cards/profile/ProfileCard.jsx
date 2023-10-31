@@ -16,7 +16,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
   const [isEdit, setIsEdit] = useState(false)
   const [isImageEdit, setIsImageEdit] = useState(false)
   const [photoUrl, setPhotoUrl] = useState(null)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [modalVisible, setModalVisible] = useState(false)
   
@@ -78,6 +78,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
     
     } catch (error) {
       console.error('Error Selecting photo (ProfileCard):', error);
+      alert("Error uploading:")
     } finally {
       setIsImageEdit(false)
     }
@@ -285,6 +286,7 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     transform: [{ translateX: -50 }, { translateY: -50 }],
+    backgroundColor: 'transparent'
   },  
   popupOverlay:{
     flex: 1,
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center' 
   },
   popupCard:{
-    width: '80%',
+    width: '85%',
     aspectRatio: .8,
     backgroundColor: 'white',
     borderRadius: SIZES.medium,
@@ -311,7 +313,7 @@ const styles = StyleSheet.create({
   popupImgContainer:{
     width: "100%",
     aspectRatio: 1,
-    position: 'relative',
+    // position: 'relative',
     // backgroundColor: 'black',
     borderRadius: SIZES.medium,
     overflow: 'hidden',

@@ -16,6 +16,7 @@ import { default as JobFooter } from "./jobdetails/footer/Footer";
 import Specifics from "./jobdetails/specifics/Specifics";
 
 // common
+import BasicCard from "./common/cards/basic/BasicCard";
 import NearbyJobCard from "./common/cards/nearby/NearbyJobCard";
 import ProfileCard from './common/cards/profile/ProfileCard';
 import Sidebar from "./common/sidebar/Sidebar";
@@ -33,5 +34,6 @@ export {
   NearbyJobCard,
   LoginBox,
   ProfileCard,
-  Sidebar
+  Sidebar,
+  BasicCard
 };

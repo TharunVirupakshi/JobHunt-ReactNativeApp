@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
 import { getFirestore, doc, setDoc ,getDoc, collection, updateDoc, getDocs, deleteDoc} from 'firebase/firestore';
-import {getStorage, ref, uploadBytes, getDownloadURL, u} from 'firebase/storage'
+import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import 'firebase/compat/auth';
 // Your web app's Firebase configuration
 

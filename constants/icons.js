@@ -11,6 +11,9 @@ import chevronRight from '../assets/icons/chevron-right.png'
 import edit from '../assets/icons/edit.png'
 import edit2 from '../assets/icons/edit2.png'
 import logout from '../assets/icons/logout.png'
+import password from '../assets/icons/password.png'
+import key from '../assets/icons/key.png'
+import bin from '../assets/icons/delete.png'
 export default {
   heart,
   menu,
@@ -24,5 +27,8 @@ export default {
   chevronRight,
   edit,
   edit2,
-  logout
+  logout,
+  password,
+  key,
+  bin
 };

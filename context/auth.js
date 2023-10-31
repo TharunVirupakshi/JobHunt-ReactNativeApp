@@ -1,6 +1,7 @@
 import { useRouter, useSegments } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { auth, createUserDoc, readUserData } from "../firebase";
+import firebase from 'firebase/compat/app'
 
 const AuthContext = React.createContext(null);
 
@@ -88,7 +89,31 @@ export function Provider(props) {
     .catch(error => alert(error.message))
   }
 
+  const handleReAuth = (currentPswd) =>{
+    const user = auth.currentUser
+    const cred = firebase.auth.EmailAuthProvider.credential(user.email,currentPswd)
 
+    return user.reauthenticateWithCredential(cred)
+  }
+
+  const handleUpdatePassword = async (currentPswd, newPassword) => {
+    let success, error;
+  
+    try {
+      await handleReAuth(currentPswd);
+      const user = auth.currentUser;
+      await user.updatePassword(newPassword);
+      console.log("(auth) Password Updated");
+      success = true;
+      error = null;
+    } catch (err) {
+      console.log("(auth) Error: ", err);
+      success = false;
+      error = err;
+    }
+  
+    return { success, error };
+  };
 
   return (
     <AuthContext.Provider
@@ -101,6 +126,8 @@ export function Provider(props) {
         setEmail,
         setPassword,
         setPhoneNumber,
+        handleReAuth,
+        handleUpdatePassword
         // userInfo
       }}
     >
