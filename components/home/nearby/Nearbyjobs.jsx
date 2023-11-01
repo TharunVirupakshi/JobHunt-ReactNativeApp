@@ -9,13 +9,13 @@ import { useRouter } from 'expo-router'
 const Nearbyjobs = () => {
   const router = useRouter()
   const {data, isLoading, error} = useFetch("search", {query: "React devloper", num_pages: '1'})
-  
+  const searchTerm = "React developer"
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Nearby Jobs</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>router.push(`/search/${searchTerm}`)}>
           <Text style={styles.headerBtn}>Show all</Text>
         </TouchableOpacity>
       </View>

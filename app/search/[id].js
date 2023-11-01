@@ -16,6 +16,7 @@ const JobSearch = () => {
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchError, setSearchError] = useState(null);
     const [page, setPage] = useState(1);
+    const [pageTitle, setPageTitle] = useState('')
 
     const handleSearch = async () => {
         setSearchLoader(true);
@@ -57,6 +58,7 @@ const JobSearch = () => {
 
     useEffect(() => {
         handleSearch()
+        setPageTitle(params.id)
     }, [])
 
     return (
@@ -89,7 +91,7 @@ const JobSearch = () => {
                 ListHeaderComponent={() => (
                     <>
                         <View style={styles.container}>
-                            <Text style={styles.searchTitle}>{params.id}</Text>
+                            <Text style={styles.searchTitle}>{pageTitle}</Text>
                             <Text style={styles.noOfSearchedJobs}>Job Opportunities</Text>
                         </View>
                         <View style={styles.loaderContainer}>
