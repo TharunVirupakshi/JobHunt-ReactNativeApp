@@ -14,6 +14,7 @@ import logout from '../assets/icons/logout.png'
 import password from '../assets/icons/password.png'
 import key from '../assets/icons/key.png'
 import bin from '../assets/icons/delete.png'
+import redBin from '../assets/icons/red-bin-2.png'
 export default {
   heart,
   menu,
@@ -30,5 +31,6 @@ export default {
   logout,
   password,
   key,
-  bin
+  bin,
+  redBin
 };

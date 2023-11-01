@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, SafeAreaView, TouchableOpacity, Image, StyleSheet, Pressable } from 'react-native'
-import { SIZES , COLORS, FONT} from '../../../constants'
+import { SIZES , COLORS, FONT, images} from '../../../constants'
 import { checkImageURL } from '../../../utils'
 
 const Sidebar = ({userPhoto, userName, appRoutes}) => {
@@ -20,7 +20,7 @@ const Sidebar = ({userPhoto, userName, appRoutes}) => {
 
           <TouchableOpacity style={styles.imageContainer}>
             <Image 
-                source={{uri: checkImageURL(userPhoto) ? userPhoto : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
+                source={checkImageURL(userPhoto) ? {uri: userPhoto} : images.profilePic}
                 resizeMode='cover'
                 style={
                   styles.profileImage

@@ -16,7 +16,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
   const [isEdit, setIsEdit] = useState(false)
   const [isImageEdit, setIsImageEdit] = useState(false)
   const [photoUrl, setPhotoUrl] = useState(null)
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   
   const [modalVisible, setModalVisible] = useState(false)
   
@@ -142,7 +142,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
     
       <TouchableOpacity style={styles.imageContainer} onPress={uploadPhoto}>
         <Image 
-            source={{uri: checkImageURL(userPhoto) ? userPhoto : "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"}}
+            source={checkImageURL(userPhoto) ? {uri : userPhoto} : images.profilePic}
             resizeMode='cover'
             style={
               styles.profileImage

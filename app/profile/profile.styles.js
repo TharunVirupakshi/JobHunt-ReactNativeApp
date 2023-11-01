@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
       shadowColor: COLORS.white,
       padding: SIZES.xLarge,
       justifyContent: 'space-between',
+      alignItems: 'center'
       // margin:SIZES.large,
     },
     popupImg:{
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
       height: "100%",
     },
     popupImgContainer:{
-      width: "100%",
+      width: "40%",
       aspectRatio: 1,
       position: 'relative',
       // backgroundColor: 'black',
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
       borderRadius: SIZES.medium,
+      width: "100%"
      
     },
     borderStyle: (state, length)=>({
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
     }), 
     feild: {
       // backgroundColor: COLORS.secondary
+      width: '100%'
     },
     label:{
       paddingHorizontal: SIZES.medium,
@@ -115,7 +118,17 @@ const styles = StyleSheet.create({
       marginTop: 0,
       // margin: SIZES.small,
     },
-
+    //Warning
+    warningText: {
+      color: 'red',
+      textAlign: 'center'
+    },
+    warningBtn: {
+      backgroundColor: '#f44336',
+    },
+    warningBtnTxt: {
+      color: 'black'
+    }
     
 })
 

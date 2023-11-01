@@ -1,12 +1,13 @@
-import { View, Text, TextInput, SafeAreaView, ScrollView, RefreshControl, ActivityIndicator,Modal, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, SafeAreaView, ScrollView, RefreshControl, ActivityIndicator,Modal, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import {Stack,useRouter, useSearchParams} from 'expo-router' 
 import {useState, useCallback, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, FONT} from '../../constants'
 import { ScreenHeaderBtn,ProfileCard, BasicCard, NearbyJobCard } from '../../components'
 import { useAuth } from "../../context/auth";
-import { readUserData, updateUserDoc } from '../../firebase'
+import { readUserData, updateUserDoc, handleDeleteAccount } from '../../firebase'
 import { Formik } from 'formik'
 import styles from './profile.styles'
+
 
 
 const profile = () => {
@@ -129,6 +130,32 @@ const profile = () => {
       setDelAccModalVisible(true)
     }
 
+    const handleDelAcc = async() => {
+      try {
+        setLoading(true)
+        const {success, error} = await handleDeleteAccount(curPswd)
+        if(success){
+          setLoading(false)
+          console.log("(Profile) Deleted acc")
+          alert("Your account has been deleted")
+          handleLogout()
+          setDelAccModalVisible(false)
+        }else{
+          setLoading(false)
+          console.log("(Profile) Error deleting", error)
+          alert("Something went wrong")
+          setDelAccModalVisible(false)
+        }
+        
+      } catch (error) {
+        setLoading(false)
+        console.error("Unhandled promise rejection:", error); 
+      }finally{
+        setLoading(false)
+      }
+      
+    }
+
   return (
    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.lightWhite}}>
         <Stack.Screen options={{
@@ -153,6 +180,7 @@ const profile = () => {
         }}/>
 
         <>
+        {/* Modal for Change Password */}
         <Modal
         animationType="fade"
         transparent={true}
@@ -226,6 +254,77 @@ const profile = () => {
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 setPswdModalVisible(false)
+                setIsPswdValid(false);
+                setIsCorrectLength(false);
+                }} 
+                style={[styles.btn, styles.btn2]} >
+                  <Text style={[styles.btnTxt2]}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          
+        </View>
+      </View>
+      </View>
+      </Modal>
+
+        {/* Modal for Delete Acc */}
+        <Modal
+        animationType="fade"
+        transparent={true}
+        visible={delAccModalVisible}
+        onRequestClose={() => {
+          setDelAccModalVisible(false);
+          setIsPswdValid(false);
+          setIsCorrectLength(false);
+        }}
+        statusBarTranslucent={true}
+      >
+      <View style={styles.popupOverlay}>
+      <View style={styles.popupCardContainer}>
+
+     
+        <View style={styles.popupCard}>
+          {loading && 
+          <ActivityIndicator 
+            size="large" color={'black'} 
+            style={styles.loading}/>
+            } 
+            <View style={styles.popupImgContainer}>
+              <Image
+                source={icons.redBin}
+                style={styles.popupImg}
+              />
+            </View>   
+            <View>
+              <Text style={styles.warningText}>
+                Deleting your account deletes all the data associated with your account.
+                Please proceed with caution.
+              </Text>
+            </View>
+                
+            <View style={styles.feild}>
+              <Text style={styles.label}>Password</Text>
+              <View style={[styles.inputWrapper, styles.borderStyle(isPswdValid, isCorrectLength)]}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your password to proceed"
+                  onChangeText={pswd => {handleCurrentPswdChange(pswd); setCurPswd(pswd)}}
+                  secureTextEntry
+                />
+              </View>
+            </View>
+
+            
+
+            <View style={styles.btnsContainer}>
+              <TouchableOpacity
+                  disabled={!isPswdValid} 
+                  onPress={handleDelAcc} 
+                  style={[styles.btn, styles.warningBtn]}>
+                  <Text style={[styles.btnTxt, styles.warningBtnTxt]}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                setDelAccModalVisible(false)
                 setIsPswdValid(false);
                 setIsCorrectLength(false);
                 }} 

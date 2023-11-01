@@ -70,6 +70,40 @@ const readUserData = async (userId) => {
   }
 };
 
+const deleteUserDoc = async(userId) => {
+  try{
+    const userRef = doc(collection(firestore, 'users'), userId);
+    // const userDoc = await getDoc(userRef);
+
+    //Delete sub collection
+    await getDocs(collection(firestore, 'users', userId, 'saved-jobs'))
+    .then((querySnapshot) => {
+      
+      querySnapshot.forEach((doc) => {
+        deleteDoc(doc.ref).then(
+          console.log("Removed fav job")
+        ).catch((error)=>{
+          console.log("Error removing: ",error)
+        })
+      });
+      console.log("(Firebase) Deleted saved-jobs:")
+    })
+    .catch((error) => {
+      console.log('(Firebase) Error deleting saved jobs:', error);
+      // return [];
+    });
+
+    //Delete user Doc
+   await deleteDoc(userRef).then(
+      console.log("(Firebase)Deleted user Document")
+    ).catch(err => { console.log("(Firebase)Error deleteing user doc", err)})
+  
+    
+  }catch(error){
+    console.log("Error deleting user details", error)
+  }
+}
+
 const updateUserDoc = async(userId, newData) => {
   try {
     const {photoUrl, ...remainderData} = newData
@@ -199,6 +233,36 @@ const deleteFavoriteItem = async(id, favoriteItemID) =>{
   })
 }
 
+const handleReAuth = (currentPswd) =>{
+    const user = auth.currentUser
+    const cred = firebase.auth.EmailAuthProvider.credential(user.email,currentPswd)
+
+    return user.reauthenticateWithCredential(cred)
+  }
+
+const handleDeleteAccount = async (currentPswd) => {
+    let success, error;
+  
+    try {
+      await handleReAuth(currentPswd);
+      const user = auth.currentUser;
+      await deleteUserDoc(user?.uid);
+      auth.signOut()
+      await user.delete()
+      console.log("(auth) User Deleted");
+      // alert("Your account has been deleted successfully!")
+      success = true;
+      error = null;
+    } catch (err) {
+      console.log("(auth) Error deleting user: ", err);
+      success = false;
+      error = err;
+    }
+  
+    return { success, error };
+  };
+
+
 
 
 
@@ -209,5 +273,6 @@ export {
   updateUserDoc, 
   addFavoriteItem, 
   fetchFavoriteItems,
-  deleteFavoriteItem
+  deleteFavoriteItem,
+  handleDeleteAccount
 }

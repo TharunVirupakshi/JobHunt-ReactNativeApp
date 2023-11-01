@@ -55,7 +55,7 @@ const LoginBox = ({handleSignIn, handleSignUp, setEmail, setPassword, setName, s
               <View style={styles.inputWrapper}>
                   <TextInput
                       style={styles.input}
-                      placeholder=" Confirm Password"
+                      placeholder="Confirm Password"
                       onChangeText={text => setConfirmPassword(text)}
                       secureTextEntry
                   />

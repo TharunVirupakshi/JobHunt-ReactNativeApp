@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Image } from 'react-native'
 
 import styles from './company.style'
-import { icons } from '../../../constants'
+import { icons, images } from '../../../constants'
 import { checkImageURL } from '../../../utils'
 
 
@@ -11,9 +11,7 @@ const Company = ({companyLogo, companyName, jobTitle, location}) => {
     <View style={styles.container}>
        <View style={styles.logoBox}>
         <Image 
-          source={{
-            uri: checkImageURL(companyLogo) ? companyLogo :  "https://internwisecouk.s3.eu-west-2.amazonaws.com/all_uploads/default_company.png"
-            }}
+          source={checkImageURL(companyLogo) ? {uri: companyLogo} : images.company}
           style={styles.logoImage}
           resizeMode='contain'  
         />
