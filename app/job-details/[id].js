@@ -1,11 +1,12 @@
 import {useCallback, useState} from 'react'
 import { 
-  SafeAreaView, Text, View, ScrollView, ActivityIndicator, RefreshControl, RefreshControlComponent
+  SafeAreaView, Text, View, ScrollView, ActivityIndicator, RefreshControl, RefreshControlComponent, Share
  } from 'react-native'
 import {Stack,useRouter, useSearchParams} from 'expo-router' 
 import{Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics} from '../../components'
 import{COLORS, icons, SIZES} from '../../constants'
 import useFetch from '../../hook/useFetch'
+
 
 const tabs = ['About', 'Qualification', 'Responsibilities']
 
@@ -23,8 +24,27 @@ const JobDetails = () => {
     setRefreshing(false)
   },[])
 
-  
-
+  const url = data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results'
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          ('Check this out!'+ '\n'+ url )
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+ 
   console.log("JOB DETAILS: ",data[0]?.job_id)
 
   const displayTabContent = () => {
@@ -68,6 +88,7 @@ const JobDetails = () => {
             <ScreenHeaderBtn 
               iconUrl={icons.share}
               dimension='60%'
+              handlePress={()=> onShare()}
             />
           )
         }}/>
