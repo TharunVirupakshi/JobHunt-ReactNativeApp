@@ -29,7 +29,7 @@ const JobDetails = () => {
     try {
       const result = await Share.share({
         message:
-          ('Check this out!'+ '\n'+ url )
+          ('Check this out!'+ '\n'+url )
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
