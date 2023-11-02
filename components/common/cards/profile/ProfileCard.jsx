@@ -10,7 +10,7 @@ import { auth } from '../../../../firebase'
 
 
 
-const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
+const ProfileCard = ({name, email, info, onSave, userPhoto, handleRemovePhoto, setRefreshing}) => {
 
   const [userInfo, setUserInfo] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -23,7 +23,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
 
   useEffect(() => {
     setUserInfo(info)
-    // console.log('Photo Url (ProfileCard):',userPhoto)
+    console.log('Photo Url (ProfileCard):',userPhoto)
     // console.log("User info in card: ",info)
   }, [info])
   
@@ -49,7 +49,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
   }
 
   
-  const uploadPhoto = async () => {
+  const selectPhoto = async () => {
     try {
       setIsImageEdit(true)
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -73,14 +73,14 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
         console.log(imagePickerResult.assets[0].uri)
       }else{
         setPhotoUrl(null)
-        setModalVisible(false)
+        // setModalVisible(false)
       }
     
     } catch (error) {
       console.error('Error Selecting photo (ProfileCard):', error);
       alert("Error uploading:")
     } finally {
-      setIsImageEdit(false)
+      // setIsImageEdit(false)
     }
   };
   
@@ -99,9 +99,9 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
       <View style={styles.popupOverlay}>
         
         <View style={styles.popupCard}>
-          <View style={styles.popupImgContainer}>
+          <TouchableOpacity style={styles.popupImgContainer} onPress={selectPhoto}>
             <Image
-              source={{uri: photoUrl}}
+              source={isImageEdit ? {uri: photoUrl} : checkImageURL(userPhoto) ? {uri : userPhoto} : images.profilePic}
               resizeMode='cover'
               style={styles.popupImg}
             />
@@ -109,8 +109,9 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
             <ActivityIndicator 
               size="large" color={COLORS.white} 
               style={styles.loading}/>}
-          </View>
+          </TouchableOpacity>
           <View style={styles.btnsContainer}>
+          {isImageEdit ? 
             <TouchableOpacity 
                 onPress={
                   async () => {
@@ -127,12 +128,38 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
                 style={styles.btn}>
                 <Text style={styles.btnTxt}>Upload</Text>
             </TouchableOpacity>
+            :
+            <TouchableOpacity 
+                onPress={selectPhoto} 
+                style={styles.btn}>
+                <Text style={styles.btnTxt}>Change photo</Text>
+            </TouchableOpacity>
+          }{
+            !isImageEdit ?  
+            <TouchableOpacity onPress={async () => {
+                    try {
+                      setLoading(true)
+                      await handleRemovePhoto()
+                    } catch (error) {
+                      // Handle the error here or log it for debugging purposes
+                      console.error("(Profile card) Error deleting:", error);
+                    } finally{
+                      setLoading(false)
+                    }
+                  }} 
+              style={[styles.btn, styles.btn2]} >
+                <Text style={[styles.btnTxt2]}>Remove Photo</Text>
+            </TouchableOpacity>
+            :
             <TouchableOpacity onPress={() => {
-              setModalVisible(!modalVisible)
+              setModalVisible(false)
+              setIsImageEdit(false)
+              setPhotoUrl(null)
               }} 
               style={[styles.btn, styles.btn2]} >
                 <Text style={[styles.btnTxt2]}>Cancel</Text>
             </TouchableOpacity>
+          }
             </View>
         </View>
       </View>
@@ -140,7 +167,7 @@ const ProfileCard = ({name, email, info, onSave, userPhoto, setRefreshing}) => {
     <View style={styles.cardContainer}>
     <View style={styles.shortDetailsContainer}>
     
-      <TouchableOpacity style={styles.imageContainer} onPress={uploadPhoto}>
+      <TouchableOpacity style={styles.imageContainer} onPress={()=> setModalVisible(true)}>
         <Image 
             source={checkImageURL(userPhoto) ? {uri : userPhoto} : images.profilePic}
             resizeMode='cover'

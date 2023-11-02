@@ -181,8 +181,8 @@ const Home = () => {
                         }}
                     />
 
-                    <Popularjobs/>
-                    <Nearbyjobs/>    
+                    {/* <Popularjobs/>
+                    <Nearbyjobs/>     */}
                     {/* <TouchableOpacity onPress={handleLogout} style={{padding: 10, backgroundColor: COLORS.primary, width: 80, marginTop: 10, borderRadius: 50}}>
                         <Text style={{color: COLORS.white, textAlign: 'center'}}>Sign Out</Text>
                     </TouchableOpacity> */}

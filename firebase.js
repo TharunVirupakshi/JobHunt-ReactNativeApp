@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
 import { getFirestore, doc, setDoc ,getDoc, collection, updateDoc, getDocs, deleteDoc} from 'firebase/firestore';
-import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import {getStorage, ref, uploadBytes, getDownloadURL, deleteObject, } from 'firebase/storage'
 import 'firebase/compat/auth';
 // Your web app's Firebase configuration
 
@@ -73,7 +73,8 @@ const readUserData = async (userId) => {
 const deleteUserDoc = async(userId) => {
   try{
     const userRef = doc(collection(firestore, 'users'), userId);
-    // const userDoc = await getDoc(userRef);
+    const userDoc = await getDoc(userRef);
+    let data = userDoc.data()
 
     //Delete sub collection
     await getDocs(collection(firestore, 'users', userId, 'saved-jobs'))
@@ -92,7 +93,8 @@ const deleteUserDoc = async(userId) => {
       console.log('(Firebase) Error deleting saved jobs:', error);
       // return [];
     });
-
+   //Delete user photo
+   await deletePhoto(data?.imgPath? data.imgPath : '')
     //Delete user Doc
    await deleteDoc(userRef).then(
       console.log("(Firebase)Deleted user Document")
@@ -107,13 +109,27 @@ const deleteUserDoc = async(userId) => {
 const updateUserDoc = async(userId, newData) => {
   try {
     const {photoUrl, ...remainderData} = newData
-    const {bio, name, role, location} = remainderData;
+    const {bio, name, role, location, imgPath} = remainderData;
+
     const newDoc = {
       bio: bio ?? "",
       role: role ?? "",
-      location: location ?? "", 
+      location: location ?? "",
+      imgPath: imgPath ?? ""
     }
 
+    
+    if(name) auth.currentUser.updateProfile({displayName: `${newData.name}`})
+    if(photoUrl){
+      console.log('Photo uri received(firebase): ',photoUrl)
+      
+      const path = await uploadPhoto(photoUrl)
+      console.log("path: "+ path)
+      newDoc.imgPath = path
+    
+    } else {
+      console.log('Photo uri NOT received(firebase)')
+    }
     // Filter out fields with empty values
     const filteredDoc = Object.entries(newDoc).reduce((acc, [key, value]) => {
       if (value !== "") {
@@ -121,15 +137,6 @@ const updateUserDoc = async(userId, newData) => {
       }
       return acc;
     }, {});
-
-    if(name) auth.currentUser.updateProfile({displayName: `${newData.name}`})
-    if(photoUrl){
-      console.log('Photo uri received(firebase): ',photoUrl)
-      const downloadUrl = await uploadPhoto(photoUrl) 
-      auth.currentUser.updateProfile({photoURL: downloadUrl})
-    } else {
-      console.log('Photo uri NOT received(firebase)')
-    }
     const userRef = doc(collection(firestore, 'users'), userId);
     await updateDoc(userRef, filteredDoc);
     console.log('Document updated successfully');
@@ -158,7 +165,8 @@ const uploadPhoto = async(uri) => {
   });
 
   try {
-    const storageRef = ref(storage, `Image/image-${Date.now()}`)
+    const path = `Image/image-${Date.now()}`
+    const storageRef = ref(storage, path)
     // if (storageRef instanceof Object) {
     //   // Storage reference is valid
     //   console.log('Storage reference is valid:', storageRef);
@@ -166,15 +174,47 @@ const uploadPhoto = async(uri) => {
     //   // Storage reference is not valid
     //   console.log('Invalid storage reference');
     // }
+    
     const result = await uploadBytes(storageRef, blob)
     blob.close()
+    const userRef = doc(collection(firestore, 'users'), auth.currentUser.uid);
+    const userDoc = await getDoc(userRef);
+    let data = userDoc.data()
+    await deletePhoto(data?.imgPath? data.imgPath : '')
     console.log("Photo Uploaded Successfully (firebase)")
-    return await getDownloadURL(storageRef);
+    console.log("Path: ",path)
+    const url = await getDownloadURL(storageRef)
+    auth.currentUser.updateProfile({photoURL: url})
+    console.log("Download url", url)
+
+    return path
   } catch (error) {
     console.log('Error Uploading Phott: ',error)
   }
 
   
+}
+
+const deletePhoto = async(url) => {
+  console.log("(Firebase) Url to delete:", url)
+  const path = url
+  const fileRef = ref(storage, path)
+
+  // console.log("(Firebase) Does file exist? ", fileRef.exists())
+  try{
+    const userRef = doc(collection(firestore, 'users'), auth.currentUser.uid);
+    auth.currentUser.updateProfile({photoURL: ''});
+    deleteObject(fileRef)
+      .then(()=>
+      console.log("Removed file"))
+      .catch(err => console.log("Error deleting", err))
+    await updateDoc(userRef, {imgPath: null});
+  }catch(err){
+    console.log("(Firebase) Error deleting photo", err)
+  }
+  
+
+  // console.log("(Firebase) Does file exist? ", fileRef.exists())
 }
 
 const addFavoriteItem = (id, favoriteItemID) => {
@@ -274,5 +314,6 @@ export {
   addFavoriteItem, 
   fetchFavoriteItems,
   deleteFavoriteItem,
-  handleDeleteAccount
+  handleDeleteAccount,
+  deletePhoto
 }

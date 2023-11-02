@@ -4,7 +4,7 @@ import {useState, useCallback, useEffect} from 'react'
 import{COLORS, icons, SIZES, SHADOWS, FONT} from '../../constants'
 import { ScreenHeaderBtn,ProfileCard, BasicCard, NearbyJobCard } from '../../components'
 import { useAuth } from "../../context/auth";
-import { readUserData, updateUserDoc, handleDeleteAccount } from '../../firebase'
+import { readUserData, updateUserDoc, handleDeleteAccount, deletePhoto } from '../../firebase'
 import { Formik } from 'formik'
 import styles from './profile.styles'
 
@@ -61,6 +61,18 @@ const profile = () => {
       await updateUserInfo(newData)
       onRefresh()
     })
+
+    const removePhoto = async() => {
+      try{
+        console.log("Url for deleting", userData?.imgPath)
+        await deletePhoto(userData?.imgPath)
+        onRefresh()
+      }catch(err){
+        console.log("(profile) Error deleting photo", err)
+      }finally{
+        onRefresh()
+      }
+    }
 
     const onRefresh = useCallback(()=>{
         setRefreshing(true)
@@ -353,7 +365,8 @@ const profile = () => {
                   email={user?.email} 
                   info={userData} 
                   userPhoto={user?.photoURL} 
-                  onSave={handleUpdate} 
+                  onSave={handleUpdate}
+                  handleRemovePhoto={removePhoto} 
                   />
                 
                 <BasicCard iconUrl={icons.key} text='Change Password' handleClick={handlePswdClick}/>
