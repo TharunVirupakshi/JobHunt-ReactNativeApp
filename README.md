@@ -7,12 +7,12 @@ Jobhunt is a cross-platform mobile application built with React Native and Expo 
      src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/bade9fc6-b5c2-494b-8d30-5fcb47135705"
      alt="Alt text"
      title="Optional title"
-     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    <img
      src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/d3cb0c74-1217-4dab-a0f9-7aeb2bdd0742"
      alt="Alt text"
      title="Optional title"
-     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    <img
      src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/34618623-8b37-400c-b26e-4d8d017b8729"
      alt="Alt text"
@@ -24,12 +24,12 @@ Jobhunt is a cross-platform mobile application built with React Native and Expo 
      src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/a29e6197-3551-4fee-a28f-de709abf06c9"
      alt="Alt text"
      title="Optional title"
-     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    <img
    src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/28ae3bc1-f4a2-463c-a580-54380ea660b8"
    alt="Alt text"
    title="Optional title"
-   width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   width="25%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    <img
      src="https://github.com/TharunVirupakshi/JobHunt-ReactNativeApp/assets/118896616/b6285705-7f1f-4d11-b7ad-b3f85738e17a"
      alt="Alt text"
